@@ -6,10 +6,10 @@ export const GET = async (
   { params }: { params: Promise<{ slug: string }>}
 ) => {
   try {
-    const {slug } =  await params;
+    const slug =  (await params).slug;
 
     const exercise = await prisma.exercise.findUnique({
-      where: { slug },
+      where: { slug: slug },
       include: {
         muscleGroups: true, // Include related muscle groups
         targetedMuscles: true, // Include related targeted muscles
