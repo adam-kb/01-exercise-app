@@ -1,9 +1,16 @@
-const Page = () => {
+import ExerciseList from "./ExerciseList";
+
+
+const ExercisesPage = () => {
+
   return (
     <main>
       <h2>Exercises Page</h2>
+      <ExerciseList />
     </main>
   )
 }
 
-export default Page;
+
+
+export default ExercisesPage;

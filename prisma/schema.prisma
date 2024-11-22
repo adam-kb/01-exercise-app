@@ -19,5 +19,4 @@ model Exercise {
   description String
   muscleGroup String
   equipment   String
-
 }
