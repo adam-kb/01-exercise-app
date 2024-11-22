@@ -2,16 +2,15 @@
 const Page = async ({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ slug: string }>
 }) => {
 
-  const exerciseId = (await params).id;
-
+  const exerciseSlug = (await params).slug;
 
   return (
     <main>
       <h2>Individual Exercise Page</h2>
-      <p>Exercise ID: {exerciseId}</p>
+      <p>Exercise Slug: {exerciseSlug}</p>
     </main>
   )
 }

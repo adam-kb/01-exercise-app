@@ -3,21 +3,14 @@ import prisma from "@/app/lib/prisma";
 
 export const GET = async (
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { slug: string } }
 ) => {
   try {
-    const exerciseId = Number(params.id);
-
-    if (isNaN(exerciseId)) {
-      return NextResponse.json(
-        { message: "Invalid exercise ID.", error: true },
-        { status: 400 }
-      );
-    }
+    const exerciseSlug = params.slug;
 
     const exercise = await prisma.exercise.findUnique({
       where: {
-        id: exerciseId,
+        slug: exerciseSlug,
       },
     });
 
