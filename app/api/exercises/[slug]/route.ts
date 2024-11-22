@@ -3,14 +3,17 @@ import prisma from "@/app/lib/prisma";
 
 export const GET = async (
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }>}
 ) => {
   try {
-    const exerciseSlug = params.slug;
+    const {slug } =  await params;
 
     const exercise = await prisma.exercise.findUnique({
-      where: {
-        slug: exerciseSlug,
+      where: { slug },
+      include: {
+        muscleGroups: true, // Include related muscle groups
+        targetedMuscles: true, // Include related targeted muscles
+        equipment: true, // Include related equipment
       },
     });
 

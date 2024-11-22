@@ -13,14 +13,13 @@ const ExerciseList = () => {
     return <span>Error: {error.message}</span>
   }
 
+  console.log(exercises);
   return (
     <ul>
       {exercises.map(exercise => (
         <li key={exercise.id}>
           <h3>{exercise.name}</h3>
           <p>{exercise.description}</p>
-          <p>{exercise.equipment}</p>
-          <p>{exercise.muscleGroup}</p>
         </li>
       ))}
     </ul>
