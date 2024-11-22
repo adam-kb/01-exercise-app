@@ -1,4 +1,3 @@
-// import { notFound } from "next/navigation";
 
 const Page = async ({
   params,
@@ -8,11 +7,6 @@ const Page = async ({
 
   const exerciseId = (await params).id;
 
-  // const exercise = await someQueryToGetExerciseById(exerciseId)  
-
-  // if(!exercise) {
-  //   notFound();
-  // }
 
   return (
     <main>

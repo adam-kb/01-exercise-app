@@ -1,6 +1,5 @@
 import ExerciseList from "./ExerciseList";
 
-
 const ExercisesPage = () => {
 
   return (
