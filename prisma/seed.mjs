@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Clear the database
+  await prisma.featuredExercise.deleteMany();
   await prisma.exerciseInstruction.deleteMany();
   await prisma.exercise.deleteMany();
   await prisma.muscleGroup.deleteMany();
@@ -35,8 +36,9 @@ async function main() {
   const pullUpBar = await prisma.equipment.create({ data: { name: 'Pull-up Bar', description: 'A bar for bodyweight exercises like pull-ups.' } });
   const squatRack = await prisma.equipment.create({ data: { name: 'Squat Rack', description: 'A rack to hold weights for squats and bench presses.' } });
 
+
   // Create Exercises
-  const exercises = [
+  const exerciseData = [
     {
       name: 'Push-up',
       slug: 'push-up',
@@ -145,16 +147,29 @@ async function main() {
     },
   ];
 
-  for (const exercise of exercises) {
-    await prisma.exercise.create({
+  const exercises = [];
+  for (const data of exerciseData) {
+    const exercise = await prisma.exercise.create({
       data: {
-        name: exercise.name,
-        slug: exercise.slug,
-        description: exercise.description,
-        difficulty: exercise.difficulty,
-        muscleGroups: { connect: exercise.muscleGroups },
-        targetedMuscles: { connect: exercise.targetedMuscles },
-        equipment: { connect: exercise.equipment ?? [] },
+        name: data.name,
+        slug: data.slug,
+        description: data.description,
+        difficulty: data.difficulty,
+        muscleGroups: { connect: data.muscleGroups },
+        targetedMuscles: { connect: data.targetedMuscles },
+        equipment: { connect: data.equipment ?? [] },
+      },
+    });
+    exercises.push(exercise);
+  }
+
+  // Seed Featured Exercises
+  const featuredExerciseIds = [exercises[0].id, exercises[1].id, exercises[2].id, exercises[3].id]; // Adjust indices as needed
+  for (const exerciseId of featuredExerciseIds) {
+    await prisma.featuredExercise.create({
+      data: {
+        exerciseId: exerciseId,
+        featuredAt: new Date(),
       },
     });
   }

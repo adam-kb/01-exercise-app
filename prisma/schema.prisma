@@ -9,19 +9,19 @@ datasource db {
 
 // Simplified Exercise Model
 model Exercise {
-  id              Int               @id @default(autoincrement())
-  name            String            @unique
-  slug            String            @unique
+  id              Int                     @id @default(autoincrement())
+  name            String                  @unique
+  slug            String                  @unique
   description     String?
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  status          ExerciseStatus    @default(ACTIVE)
-  difficulty      Difficulty        @default(Beginner)
-  featured        Boolean           @default(false)
-  targetedMuscles TargetedMuscle[]  @relation("ExerciseToMuscle")
-  muscleGroups    MuscleGroup[]     @relation("ExerciseToGroup")
-  equipment       Equipment[]       @relation("ExerciseToEquipment")
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+  status          ExerciseStatus          @default(ACTIVE)
+  difficulty      Difficulty              @default(Beginner)
+  targetedMuscles TargetedMuscle[]        @relation("ExerciseToMuscle")
+  muscleGroups    MuscleGroup[]           @relation("ExerciseToGroup")
+  equipment       Equipment[]             @relation("ExerciseToEquipment")
   instructions    ExerciseInstruction[]
+  featured        FeaturedExercise?
 }
 
 enum ExerciseStatus {
@@ -34,6 +34,13 @@ enum Difficulty {
   Beginner
   Intermediate
   Advanced
+}
+
+model FeaturedExercise {
+  id         Int      @id @default(autoincrement())
+  exerciseId Int      @unique
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  featuredAt DateTime @default(now()) // Optional: Track when it was featured
 }
 
 // Muscle Group Model

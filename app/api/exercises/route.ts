@@ -4,14 +4,12 @@ import prisma from "@/app/lib/prisma";
 export const GET = async () => {
   try {
 
-    const exercises2 = await prisma.exercise.
     const exercises = await prisma.exercise.findMany({
       include: {
         muscleGroups: true,
         targetedMuscles: true,
         equipment: true,
         },
-        take
       },
     );
 
