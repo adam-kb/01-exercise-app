@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,32 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// model Exercise {
-//   id          Int      @id @default(autoincrement())
-//   name        String
-//   description String
-//   muscleGroup String
-//   equipment   String
-// }
-
-// This is the Prisma schema for your workout app
-
-// Defines the exercise table
+// Simplified Exercise Model
 model Exercise {
-  id                  Int                  @id @default(autoincrement())
-  name                String               @unique
-  slug                String               @unique
-  description         String?
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  status              ExerciseStatus       @default(ACTIVE)
-  difficulty          Difficulty           @default(Beginner)
-  targetedMuscles     ExerciseTargetedMuscle[]
-  equipment           ExerciseEquipment[]
-  muscleGroups        ExerciseMuscleGroup[]
-  tags                ExerciseTag[]
-  instructions        ExerciseInstruction[]
-  media               ExerciseMedia[]
+  id              Int               @id @default(autoincrement())
+  name            String            @unique
+  slug            String            @unique
+  description     String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  status          ExerciseStatus    @default(ACTIVE)
+  difficulty      Difficulty        @default(Beginner)
+  featured        Boolean           @default(false)
+  targetedMuscles TargetedMuscle[]  @relation("ExerciseToMuscle")
+  muscleGroups    MuscleGroup[]     @relation("ExerciseToGroup")
+  equipment       Equipment[]       @relation("ExerciseToEquipment")
+  instructions    ExerciseInstruction[]
 }
 
 enum ExerciseStatus {
@@ -53,93 +36,33 @@ enum Difficulty {
   Advanced
 }
 
-// Defines the muscle group (e.g., Chest, Legs, etc.)
+// Muscle Group Model
 model MuscleGroup {
-  id          Int                 @id @default(autoincrement())
-  name        String              @unique
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
   description String?
-  exercises   ExerciseMuscleGroup[]
+  exercises   Exercise[]  @relation("ExerciseToGroup")
 }
 
-// Defines the targeted muscles (e.g., Pectoralis Major, Deltoid, etc.)
+// Targeted Muscle Model
 model TargetedMuscle {
-  id          Int                 @id @default(autoincrement())
-  name        String              @unique
-  exercises   ExerciseTargetedMuscle[]
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  exercises   Exercise[]  @relation("ExerciseToMuscle")
 }
 
-// Defines the equipment (e.g., Dumbbells, Barbell, Bench, etc.)
+// Equipment Model
 model Equipment {
-  id          Int                 @id @default(autoincrement())
-  name        String              @unique
-  exercises   ExerciseEquipment[]
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  description String?
+  exercises   Exercise[]  @relation("ExerciseToEquipment")
 }
 
-// Join table for many-to-many between Exercise and TargetedMuscles
-model ExerciseTargetedMuscle {
-  exerciseId  Int
-  muscleId    Int
-  exercise    Exercise   @relation(fields: [exerciseId], references: [id])
-  muscle      TargetedMuscle @relation(fields: [muscleId], references: [id])
-
-  @@id([exerciseId, muscleId]) // composite primary key
-}
-
-// Join table for many-to-many between Exercise and Equipment
-model ExerciseEquipment {
-  exerciseId  Int
-  equipmentId Int
-  exercise    Exercise   @relation(fields: [exerciseId], references: [id])
-  equipment   Equipment  @relation(fields: [equipmentId], references: [id])
-
-  @@id([exerciseId, equipmentId]) // composite primary key
-}
-
-// Join table for many-to-many between Exercise and MuscleGroup
-model ExerciseMuscleGroup {
-  exerciseId   Int
-  muscleGroupId Int
-  exercise     Exercise     @relation(fields: [exerciseId], references: [id])
-  muscleGroup  MuscleGroup  @relation(fields: [muscleGroupId], references: [id])
-
-  @@id([exerciseId, muscleGroupId]) // composite primary key
-}
-
-// Defines tags for exercises (optional for categorization)
-model Tag {
-  id    Int     @id @default(autoincrement())
-  name  String  @unique
-  exercises ExerciseTag[]
-}
-
-// Join table for many-to-many between Exercise and Tag
-model ExerciseTag {
-  exerciseId Int
-  tagId       Int
-  exercise   Exercise  @relation(fields: [exerciseId], references: [id])
-  tag        Tag       @relation(fields: [tagId], references: [id])
-
-  @@id([exerciseId, tagId]) // composite primary key
-}
-
-// Exercise instructions (optional)
+// Exercise Instructions
 model ExerciseInstruction {
   id          Int      @id @default(autoincrement())
   exerciseId  Int
   instruction String
   exercise    Exercise @relation(fields: [exerciseId], references: [id])
-}
-
-// Media for exercises (optional)
-model ExerciseMedia {
-  id          Int      @id @default(autoincrement())
-  exerciseId  Int
-  mediaUrl    String
-  mediaType   MediaType
-  exercise    Exercise @relation(fields: [exerciseId], references: [id])
-}
-
-enum MediaType {
-  IMAGE
-  VIDEO
 }

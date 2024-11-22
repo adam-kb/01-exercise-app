@@ -1,5 +1,6 @@
 'use client'
 
+import Link from "next/link";
 import { useExercises } from "../queries/useExercises";
 
 const ExerciseList = () => {
@@ -13,16 +14,21 @@ const ExerciseList = () => {
     return <span>Error: {error.message}</span>
   }
 
-  console.log(exercises);
   return (
     <ul>
       {exercises.map(exercise => (
         <li key={exercise.id}>
-          <h3>{exercise.name}</h3>
+          <Link href={`/exercises/${exercise.slug}`} >{exercise.name}</Link>
           <p>{exercise.description}</p>
+          <ul>{exercise.equipment.map((exercise) => (
+            <li key={exercise.id + 'equip'}>{exercise.name}</li>
+          )
+          )}
+          </ul>
         </li>
-      ))}
-    </ul>
+      ))
+      }
+    </ul >
   )
 }
 
