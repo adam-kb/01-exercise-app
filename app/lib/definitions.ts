@@ -1,31 +1,3 @@
-// export type Exercise = {
-//   id: number;
-//   name: string;
-//   slug: string;
-//   description?: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-//   muscleGroups: {
-//     id: number;
-//     name: string;
-//     description?: string;
-//   }[];
-//   targetedMuscles: {
-//     id: number;
-//     name: string;
-//   }[];
-//   equipment: {
-//     id: number;
-//     name: string;
-//     description?: string;
-//   }[];
-//   instructions: {
-//     id: number;
-//     instruction: string;
-//   }[];
-// };
-
-
 export interface Exercise {
   id: number;
   name: string;
@@ -33,6 +5,8 @@ export interface Exercise {
   description?: string;
   createdAt: Date;
   updatedAt: Date;
+  difficulty: Difficulty; // Enum type for difficulty
+  featured?: FeaturedExercise; // Link to the FeaturedExercise model
   muscleGroups: MuscleGroup[];
   targetedMuscles: TargetedMuscle[];
   equipment: Equipment[];
@@ -60,3 +34,11 @@ export interface ExerciseInstruction {
   id: number;
   instruction: string;
 }
+
+export interface FeaturedExercise {
+  id: number;
+  exerciseId: number; // References the Exercise model
+  featuredAt: Date; // Timestamp for when the exercise was featured
+}
+
+export type Difficulty = 'Beginner' | 'Intermediate' | 'Advanced';
