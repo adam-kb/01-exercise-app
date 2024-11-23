@@ -1,26 +1,48 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
+import { ExerciseStatus } from "@prisma/client";
+import { FeaturedExerciseOutputData } from "@/app/lib/definitions";
 
 export const GET = async () => {
   try {
-
-    const exercises = await prisma.exercise.findMany({
+    const featuredExercises: FeaturedExerciseOutputData[] = await prisma.featuredExercise.findMany({
+      where: {
+        exercise: {
+          status: ExerciseStatus.ACTIVE
+        }
+      },
       include: {
-        muscleGroups: true,
-        targetedMuscles: true,
-        equipment: true,
+        exercise: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            description: true,
+            difficulty: true,
+            muscleGroups: {
+              select: { name: true }
+            },
+            targetedMuscles: {
+              select: { name: true }
+            },
+            equipment: {
+              select: { name: true }
+            }
+          },
         },
       },
-    );
+      orderBy: {
+        featuredAt: 'desc'
+      }
+    })
 
-    return new NextResponse(JSON.stringify(exercises), { status: 200 });
+    return NextResponse.json(featuredExercises, { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching exercises.", error);
 
     return NextResponse.json(
       { message: "Failed to retrieve exercises.", error: true },
-      { status: 500 },
+      { status: 500 }
     );
   }
 };
- 
