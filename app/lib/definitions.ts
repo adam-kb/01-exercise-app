@@ -1,10 +1,10 @@
-import { Prisma } from "@prisma/client";
+import {
+  Prisma,
+  Difficulty as ExerciseDifficulty,
+  ExerciseStatus,
+} from "@prisma/client";
 
-// Enum types
-export type Difficulty = "Beginner" | "Intermediate" | "Advanced";
-export type Status = "ACTIVE" | "FEATURED" | "ARCHIVED";
-
-// Custom output type based on Exercise
+// Represents the output of a FeaturedExercise query, including the associated exercise with selected fields.
 export type FeaturedExerciseOutputData = Prisma.FeaturedExerciseGetPayload<{
   include: {
     exercise: {
@@ -21,3 +21,7 @@ export type FeaturedExerciseOutputData = Prisma.FeaturedExerciseGetPayload<{
     };
   };
 }>;
+
+// Enum types
+export type Difficulty = ExerciseDifficulty;
+export type Status = ExerciseStatus;

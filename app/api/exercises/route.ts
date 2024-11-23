@@ -19,10 +19,10 @@ export const GET = async () => {
             slug: true,
             description: true,
             difficulty: true,
-            muscleGroups: {
+            targetedMuscles: {
               select: { name: true }
             },
-            targetedMuscles: {
+            muscleGroups: {
               select: { name: true }
             },
             equipment: {
