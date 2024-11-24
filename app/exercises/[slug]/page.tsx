@@ -1,3 +1,4 @@
+import { isValidExercise } from "@/app/lib/utils";
 import Exercise from "@/app/ui/exercises/Exercise";
 import { notFound } from "next/navigation";
 
@@ -9,7 +10,9 @@ const Page = async ({
 
   const exerciseSlug = (await params).slug;
 
-  if(!exerciseSlug) {
+  const slugExists = await isValidExercise({slug: exerciseSlug});
+
+  if (!slugExists) {
     notFound();
   }
 

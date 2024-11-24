@@ -33,6 +33,11 @@ export type FeaturedExerciseOutputData = Prisma.FeaturedExerciseGetPayload<{
   };
 }>;
 
+export type ValidateExerciseOptions = {
+  slug?: string;
+  id?: number;
+};
+
 // Enum types
 export type Difficulty = ExerciseDifficulty;
 export type Status = ExerciseStatus;

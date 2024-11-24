@@ -1,9 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { ExerciseLinkProps } from "@/app/lib/definitions";
 import { fetchExercise } from "@/app/queries/useExercises";
 import { useQueryClient } from "@tanstack/react-query";
-import Link from "next/link";
 
 const ExerciseLink = ({
   href,

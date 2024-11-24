@@ -1,6 +1,7 @@
 import { FeaturedExerciseOutputData } from "@/app/lib/definitions";
 import { useQuery } from "@tanstack/react-query";
 
+// TODO: Re-org these fn? Keep the tanstack hooks separate?
 const fetchFeaturedExercises = async () => {
   const response = await fetch("/api/exercises");
 
