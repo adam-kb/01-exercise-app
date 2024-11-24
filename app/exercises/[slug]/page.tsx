@@ -1,3 +1,5 @@
+import Exercise from "@/app/ui/exercises/Exercise";
+import { notFound } from "next/navigation";
 
 const Page = async ({
   params,
@@ -7,10 +9,14 @@ const Page = async ({
 
   const exerciseSlug = (await params).slug;
 
+  if(!exerciseSlug) {
+    notFound();
+  }
+
   return (
     <main>
       <h2>Individual Exercise Page</h2>
-      <p>Exercise Slug: {exerciseSlug}</p>
+      <Exercise slug={exerciseSlug} />
     </main>
   )
 }

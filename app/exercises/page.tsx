@@ -1,4 +1,4 @@
-import ExerciseList from "./ExerciseList";
+import ExerciseList from "@/app/ui/exercises/ExerciseList";
 
 const ExercisesPage = () => {
 

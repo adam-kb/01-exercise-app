@@ -1,19 +1,39 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
+import { Exercise } from "@/app/lib/definitions";
 
 export const GET = async (
   request: Request,
-  { params }: { params: Promise<{ slug: string }>}
+  { params }: { params: Promise<{ slug: string }> }
 ) => {
-  try {
-    const slug =  (await params).slug;
+  const exerciseSlug = (await params).slug;
 
-    const exercise = await prisma.exercise.findUnique({
-      where: { slug: slug },
-      include: {
-        muscleGroups: true, // Include related muscle groups
-        targetedMuscles: true, // Include related targeted muscles
-        equipment: true, // Include related equipment
+  if (!exerciseSlug) {
+    return NextResponse.json(
+      { message: "Failed to retrieve exercise.", error: true },
+      { status: 500 }
+    );
+  }
+
+  try {
+    const exercise: Exercise | null = await prisma.exercise.findUnique({
+      where: { slug: exerciseSlug },
+      select: {
+        status: true,
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        difficulty: true,
+        targetedMuscles: {
+          select: { name: true },
+        },
+        muscleGroups: {
+          select: { name: true },
+        },
+        equipment: {
+          select: { name: true },
+        },
       },
     });
 
@@ -24,9 +44,9 @@ export const GET = async (
       );
     }
 
-    return NextResponse.json(exercise);
+    return NextResponse.json(exercise, { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching exercise.", error);
 
     return NextResponse.json(
       { message: "Failed to retrieve exercise.", error: true },
