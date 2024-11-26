@@ -31,7 +31,7 @@ const ExercisePage = async ({
   return (
     <main>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ExerciseDataWrapper slug={exerciseSlug} />
+        <ExerciseDataWrapper slug={exerciseSlug} edit={false} />
       </HydrationBoundary>
     </main>
   );

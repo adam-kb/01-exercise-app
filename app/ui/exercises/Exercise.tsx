@@ -1,6 +1,6 @@
-import { Exercise as ExercistType } from "@/app/lib/definitions";
+import { Exercise as ExerciseType } from "@/app/lib/definitions";
 
-const Exercise = ({ exercise }: { exercise: ExercistType }) => {
+const Exercise = ({ exercise }: { exercise: ExerciseType }) => {
 
   return <main>
     <h1 className="text-3xl font-bold">{exercise.name}</h1>
