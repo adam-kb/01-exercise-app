@@ -1,6 +1,6 @@
-import { Difficulty, PrismaClient } from '@prisma/client';
+import { Difficulty } from '@prisma/client';
+import prisma from '@/app/lib/prisma';
 
-const prisma = new PrismaClient();
 
 async function main() {
   // Clear the database

@@ -7,21 +7,54 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Simplified Exercise Model
 model Exercise {
-  id              Int                     @id @default(autoincrement())
-  name            String                  @unique
-  slug            String                  @unique
+  id              Int                   @id @default(autoincrement())
+  name            String                @unique
   description     String?
-  createdAt       DateTime                @default(now())
-  updatedAt       DateTime                @updatedAt
-  status          ExerciseStatus          @default(ACTIVE)
-  difficulty      Difficulty              @default(Beginner)
-  targetedMuscles TargetedMuscle[]        @relation("ExerciseToMuscle")
-  muscleGroups    MuscleGroup[]           @relation("ExerciseToGroup")
-  equipment       Equipment[]             @relation("ExerciseToEquipment")
+  createdAt       DateTime              @default(now())
+  difficulty      Difficulty            @default(Beginner)
+  slug            String                @unique
+  status          ExerciseStatus        @default(ACTIVE)
+  updatedAt       DateTime              @updatedAt
   instructions    ExerciseInstruction[]
   featured        FeaturedExercise?
+  equipment       Equipment[]           @relation("ExerciseToEquipment")
+  muscleGroups    MuscleGroup[]         @relation("ExerciseToGroup")
+  targetedMuscles TargetedMuscle[]      @relation("ExerciseToMuscle")
+}
+
+model FeaturedExercise {
+  id         Int      @id @default(autoincrement())
+  exerciseId Int      @unique
+  featuredAt DateTime @default(now())
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+}
+
+model MuscleGroup {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String?
+  exercises   Exercise[] @relation("ExerciseToGroup")
+}
+
+model TargetedMuscle {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  exercises Exercise[] @relation("ExerciseToMuscle")
+}
+
+model Equipment {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String?
+  exercises   Exercise[] @relation("ExerciseToEquipment")
+}
+
+model ExerciseInstruction {
+  id          Int      @id @default(autoincrement())
+  exerciseId  Int
+  instruction String
+  exercise    Exercise @relation(fields: [exerciseId], references: [id])
 }
 
 enum ExerciseStatus {
@@ -34,42 +67,4 @@ enum Difficulty {
   Beginner
   Intermediate
   Advanced
-}
-
-model FeaturedExercise {
-  id         Int      @id @default(autoincrement())
-  exerciseId Int      @unique
-  exercise   Exercise @relation(fields: [exerciseId], references: [id])
-  featuredAt DateTime @default(now()) // Optional: Track when it was featured
-}
-
-// Muscle Group Model
-model MuscleGroup {
-  id          Int         @id @default(autoincrement())
-  name        String      @unique
-  description String?
-  exercises   Exercise[]  @relation("ExerciseToGroup")
-}
-
-// Targeted Muscle Model
-model TargetedMuscle {
-  id          Int         @id @default(autoincrement())
-  name        String      @unique
-  exercises   Exercise[]  @relation("ExerciseToMuscle")
-}
-
-// Equipment Model
-model Equipment {
-  id          Int         @id @default(autoincrement())
-  name        String      @unique
-  description String?
-  exercises   Exercise[]  @relation("ExerciseToEquipment")
-}
-
-// Exercise Instructions
-model ExerciseInstruction {
-  id          Int      @id @default(autoincrement())
-  exerciseId  Int
-  instruction String
-  exercise    Exercise @relation(fields: [exerciseId], references: [id])
 }

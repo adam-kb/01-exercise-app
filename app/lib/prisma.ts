@@ -1,11 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 
+console.log("Prisma DATABASE_URL:", process.env.DATABASE_URL);
+
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({
-    log: ["info", "warn", "error"], // "query", "info", "warn", "error"
+    log: ["query", "info", "warn", "error"], // "query", "info", "warn", "error"
   });
 
 if (process.env.NODE_ENV !== "production") {
