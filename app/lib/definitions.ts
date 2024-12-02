@@ -15,6 +15,23 @@ export type Exercise = {
   equipment: { name: string }[];
 };
 
+// naming is hard
+export type ExerciseDetailObjectShape = {
+  id: number;
+  name: string;
+  description?: string;
+}
+
+// Enum types
+export type Difficulty = ExerciseDifficulty;
+export type Status = ExerciseStatus;
+
+export type ExerciseLinkProps = {
+  href: string;
+  slug: string;
+  children: string;
+}
+
 // Represents the output of a FeaturedExercise query, including the associated exercise with selected fields.
 export type FeaturedExerciseOutputData = Prisma.FeaturedExerciseGetPayload<{
   include: {
@@ -38,12 +55,6 @@ export type ValidateExerciseOptions = {
   id?: number;
 };
 
-// Enum types
-export type Difficulty = ExerciseDifficulty;
-export type Status = ExerciseStatus;
-
-export type ExerciseLinkProps = {
-  href: string;
-  slug: string;
-  children: string;
-}
+export type Equipment = ExerciseDetailObjectShape
+export type MuscleGroup = ExerciseDetailObjectShape
+export type TargetedMuscle = ExerciseDetailObjectShape

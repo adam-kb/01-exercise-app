@@ -2,7 +2,6 @@ import prisma from "@/app/lib/prisma";
 import { ExerciseStatus } from "@prisma/client";
 import { ValidateExerciseOptions } from "./definitions";
 
-
 // TODO: Does this belong here? If not, where? Is this a util?
 export const isValidExercise = async ({
   slug,
@@ -23,4 +22,12 @@ export const isValidExercise = async ({
     },
   });
   return exercise !== null;
+};
+
+export const isOptionCurrent = <T extends object>(
+  option: T,
+  currentValues: T[],
+  key: keyof T
+): boolean => {
+  return currentValues.some((current) => current[key] === option[key]);
 };
