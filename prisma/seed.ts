@@ -4,11 +4,11 @@ import prisma from '@/app/lib/prisma';
 
 async function main() {
   // Clear the database
-  await prisma.featuredExercise.deleteMany();
-  await prisma.exerciseInstruction.deleteMany();
+  
   await prisma.exercise.deleteMany();
+  await prisma.featureExercise.deleteMany();
   await prisma.muscleGroup.deleteMany();
-  await prisma.targetedMuscle.deleteMany();
+  await prisma.targetMuscle.deleteMany();
   await prisma.equipment.deleteMany();
 
   // Seed Muscle Groups
@@ -19,14 +19,14 @@ async function main() {
   const shoulders = await prisma.muscleGroup.create({ data: { name: 'Shoulders', description: 'Includes the Deltoid muscles.' } });
 
   // Seed Targeted Muscles
-  const pectoralisMajor = await prisma.targetedMuscle.create({ data: { name: 'Pectoralis Major' } });
-  const triceps = await prisma.targetedMuscle.create({ data: { name: 'Triceps' } });
-  const biceps = await prisma.targetedMuscle.create({ data: { name: 'Biceps' } });
-  const quadriceps = await prisma.targetedMuscle.create({ data: { name: 'Quadriceps' } });
-  const hamstrings = await prisma.targetedMuscle.create({ data: { name: 'Hamstrings' } });
-  const glutes = await prisma.targetedMuscle.create({ data: { name: 'Glutes' } });
-  const latissimusDorsi = await prisma.targetedMuscle.create({ data: { name: 'Latissimus Dorsi' } });
-  const deltoid = await prisma.targetedMuscle.create({ data: { name: 'Deltoid' } });
+  const pectoralisMajor = await prisma.targetMuscle.create({ data: { name: 'Pectoralis Major' } });
+  const triceps = await prisma.targetMuscle.create({ data: { name: 'Triceps' } });
+  const biceps = await prisma.targetMuscle.create({ data: { name: 'Biceps' } });
+  const quadriceps = await prisma.targetMuscle.create({ data: { name: 'Quadriceps' } });
+  const hamstrings = await prisma.targetMuscle.create({ data: { name: 'Hamstrings' } });
+  const glutes = await prisma.targetMuscle.create({ data: { name: 'Glutes' } });
+  const latissimusDorsi = await prisma.targetMuscle.create({ data: { name: 'Latissimus Dorsi' } });
+  const deltoid = await prisma.targetMuscle.create({ data: { name: 'Deltoid' } });
 
   // Seed Equipment
   const barbell = await prisma.equipment.create({ data: { name: 'Barbell', description: 'A long bar used for weightlifting.' } });
@@ -43,109 +43,122 @@ async function main() {
       name: 'Push-up',
       slug: 'push-up',
       description: 'A bodyweight exercise targeting chest and triceps.',
+      instruction: 'Start in a plank position, lower your body until your chest nearly touches the ground, then push back up.',
       difficulty: Difficulty.Beginner,
-      muscleGroups: [{ id: chest.id }, { id: arms.id }],
-      targetedMuscles: [{ id: pectoralisMajor.id }, { id: triceps.id }],
+      muscleGroup: [{ id: chest.id }, { id: arms.id }],
+      targetMuscle: [{ id: pectoralisMajor.id }, { id: triceps.id }],
     },
     {
       name: 'Bench Press',
       slug: 'bench-press',
       description: 'A compound lift for chest and triceps.',
+      instruction: 'Lie flat on a bench and press the barbell upward until your arms are fully extended.',
       difficulty: Difficulty.Intermediate,
-      muscleGroups: [{ id: chest.id }],
-      targetedMuscles: [{ id: pectoralisMajor.id }, { id: triceps.id }],
+      muscleGroup: [{ id: chest.id }],
+      targetMuscle: [{ id: pectoralisMajor.id }, { id: triceps.id }],
       equipment: [{ id: barbell.id }, { id: bench.id }],
     },
     {
       name: 'Dumbbell Curl',
       slug: 'dumbbell-curl',
       description: 'An isolation exercise for the biceps.',
+      instruction: 'Hold a dumbbell in each hand, curl the weights upward by bending your elbows, then lower them slowly.',
       difficulty: Difficulty.Beginner,
-      muscleGroups: [{ id: arms.id }],
-      targetedMuscles: [{ id: biceps.id }],
+      muscleGroup: [{ id: arms.id }],
+      targetMuscle: [{ id: biceps.id }],
       equipment: [{ id: dumbbell.id }],
     },
     {
       name: 'Barbell Squat',
       slug: 'barbell-squat',
       description: 'A lower-body exercise targeting quadriceps and glutes.',
+      instruction: 'Stand with a barbell on your shoulders, squat down until your thighs are parallel to the ground, then push back up.',
       difficulty: Difficulty.Advanced,
-      muscleGroups: [{ id: legs.id }],
-      targetedMuscles: [{ id: quadriceps.id }, { id: glutes.id }],
+      muscleGroup: [{ id: legs.id }],
+      targetMuscle: [{ id: quadriceps.id }, { id: glutes.id }],
       equipment: [{ id: barbell.id }, { id: squatRack.id }],
     },
     {
       name: 'Deadlift',
       slug: 'deadlift',
       description: 'A compound lift targeting the posterior chain.',
+      instruction: 'With feet shoulder-width apart, lift the barbell by extending your hips and knees simultaneously.',
       difficulty: Difficulty.Advanced,
-      muscleGroups: [{ id: back.id }, { id: legs.id }],
-      targetedMuscles: [{ id: hamstrings.id }, { id: glutes.id }],
+      muscleGroup: [{ id: back.id }, { id: legs.id }],
+      targetMuscle: [{ id: hamstrings.id }, { id: glutes.id }],
       equipment: [{ id: barbell.id }],
     },
     {
       name: 'Pull-up',
       slug: 'pull-up',
       description: 'A bodyweight exercise targeting the back and biceps.',
+      instruction: 'Grab the pull-up bar with palms facing away, pull your body upward until your chin is above the bar, then lower yourself down.',
       difficulty: Difficulty.Intermediate,
-      muscleGroups: [{ id: back.id }, { id: arms.id }],
-      targetedMuscles: [{ id: latissimusDorsi.id }, { id: biceps.id }],
+      muscleGroup: [{ id: back.id }, { id: arms.id }],
+      targetMuscle: [{ id: latissimusDorsi.id }, { id: biceps.id }],
       equipment: [{ id: pullUpBar.id }],
     },
     {
       name: 'Overhead Press',
       slug: 'overhead-press',
       description: 'A compound shoulder exercise targeting the deltoids.',
+      instruction: 'Lift the barbell from your chest to overhead until your arms are fully extended, then lower it back down.',
       difficulty: Difficulty.Intermediate,
-      muscleGroups: [{ id: shoulders.id }],
-      targetedMuscles: [{ id: deltoid.id }, { id: triceps.id }],
+      muscleGroup: [{ id: shoulders.id }],
+      targetMuscle: [{ id: deltoid.id }, { id: triceps.id }],
       equipment: [{ id: barbell.id }],
     },
     {
       name: 'Lunges',
       slug: 'lunges',
       description: 'A unilateral lower-body exercise targeting glutes and quads.',
+      instruction: 'Step forward with one leg, lower your hips until both knees are bent at a 90-degree angle, then return to standing.',
       difficulty: Difficulty.Beginner,
-      muscleGroups: [{ id: legs.id }],
-      targetedMuscles: [{ id: glutes.id }, { id: quadriceps.id }],
+      muscleGroup: [{ id: legs.id }],
+      targetMuscle: [{ id: glutes.id }, { id: quadriceps.id }],
     },
     {
       name: 'Kettlebell Swing',
       slug: 'kettlebell-swing',
       description: 'A full-body movement targeting hamstrings and glutes.',
+      instruction: 'Hold the kettlebell with both hands, swing it back between your legs, then thrust your hips forward to swing it upward.',
       difficulty: Difficulty.Intermediate,
-      muscleGroups: [{ id: legs.id }],
-      targetedMuscles: [{ id: hamstrings.id }, { id: glutes.id }],
+      muscleGroup: [{ id: legs.id }],
+      targetMuscle: [{ id: hamstrings.id }, { id: glutes.id }],
       equipment: [{ id: kettlebell.id }],
     },
     {
       name: 'Incline Bench Press',
       slug: 'incline-bench-press',
       description: 'A chest exercise that emphasizes the upper pectorals.',
+      instruction: 'Lie on an incline bench and press the barbell upward until your arms are fully extended.',
       difficulty: Difficulty.Intermediate,
-      muscleGroups: [{ id: chest.id }],
-      targetedMuscles: [{ id: pectoralisMajor.id }],
+      muscleGroup: [{ id: chest.id }],
+      targetMuscle: [{ id: pectoralisMajor.id }],
       equipment: [{ id: barbell.id }, { id: bench.id }],
     },
     {
       name: 'Dumbbell Lateral Raise',
       slug: 'dumbbell-lateral-raise',
       description: 'An isolation exercise targeting the lateral deltoids.',
+      instruction: 'Hold a dumbbell in each hand, lift your arms to the sides until they are shoulder height, then lower them slowly.',
       difficulty: Difficulty.Beginner,
-      muscleGroups: [{ id: shoulders.id }],
-      targetedMuscles: [{ id: deltoid.id }],
+      muscleGroup: [{ id: shoulders.id }],
+      targetMuscle: [{ id: deltoid.id }],
       equipment: [{ id: dumbbell.id }],
     },
     {
       name: 'Chin-up',
       slug: 'chin-up',
       description: 'A bodyweight exercise emphasizing the biceps and back.',
+      instruction: 'Grab the bar with palms facing you, pull yourself up until your chin is above the bar, then lower yourself down.',
       difficulty: Difficulty.Intermediate,
-      muscleGroups: [{ id: back.id }, { id: arms.id }],
-      targetedMuscles: [{ id: biceps.id }, { id: latissimusDorsi.id }],
+      muscleGroup: [{ id: back.id }, { id: arms.id }],
+      targetMuscle: [{ id: biceps.id }, { id: latissimusDorsi.id }],
       equipment: [{ id: pullUpBar.id }],
     },
   ];
+  
 
   const exercises = [];
   for (const data of exerciseData) {
@@ -155,8 +168,8 @@ async function main() {
         slug: data.slug,
         description: data.description,
         difficulty: data.difficulty,
-        muscleGroups: { connect: data.muscleGroups },
-        targetedMuscles: { connect: data.targetedMuscles },
+        muscleGroup: { connect: data.muscleGroup },
+        targetMuscle: { connect: data.targetMuscle },
         equipment: { connect: data.equipment ?? [] },
       },
     });
@@ -166,7 +179,7 @@ async function main() {
   // Seed Featured Exercises
   const featuredExerciseIds = [exercises[0].id, exercises[1].id, exercises[2].id, exercises[3].id]; // Adjust indices as needed
   for (const exerciseId of featuredExerciseIds) {
-    await prisma.featuredExercise.create({
+    await prisma.featureExercise.create({
       data: {
         exerciseId: exerciseId,
         featuredAt: new Date(),

@@ -18,8 +18,8 @@ model Exercise {
   featured        FeatureExercise?
   equipment       Equipment[]           @relation("ExerciseToEquipment")
   muscleGroup     MuscleGroup[]         @relation("ExerciseToGroup")
-  createdAt       DateTime              @default(now())
   targetMuscle    TargetMuscle[]        @relation("ExerciseToMuscle")
+  createdAt       DateTime              @default(now())
   updatedAt       DateTime              @updatedAt
 }
 
