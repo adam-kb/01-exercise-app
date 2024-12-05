@@ -10,20 +10,20 @@ datasource db {
 model Exercise {
   id              Int                   @id @default(autoincrement())
   name            String                @unique
-  description     String?
-  createdAt       DateTime              @default(now())
-  difficulty      Difficulty            @default(Beginner)
   slug            String                @unique
-  status          ExerciseStatus        @default(ACTIVE)
-  updatedAt       DateTime              @updatedAt
-  instructions    ExerciseInstruction[]
-  featured        FeaturedExercise?
+  description     String?
+  instruction     String?
+  difficulty      Difficulty            @default(Beginner)
+  status          Status                @default(ACTIVE)
+  featured        FeatureExercise?
   equipment       Equipment[]           @relation("ExerciseToEquipment")
-  muscleGroups    MuscleGroup[]         @relation("ExerciseToGroup")
-  targetedMuscles TargetedMuscle[]      @relation("ExerciseToMuscle")
+  muscleGroup     MuscleGroup[]         @relation("ExerciseToGroup")
+  createdAt       DateTime              @default(now())
+  targetMuscle    TargetMuscle[]        @relation("ExerciseToMuscle")
+  updatedAt       DateTime              @updatedAt
 }
 
-model FeaturedExercise {
+model FeatureExercise {
   id         Int      @id @default(autoincrement())
   exerciseId Int      @unique
   featuredAt DateTime @default(now())
@@ -34,30 +34,24 @@ model MuscleGroup {
   id          Int        @id @default(autoincrement())
   name        String     @unique
   description String?
-  exercises   Exercise[] @relation("ExerciseToGroup")
+  exercise    Exercise[] @relation("ExerciseToGroup")
 }
 
-model TargetedMuscle {
-  id        Int        @id @default(autoincrement())
-  name      String     @unique
-  exercises Exercise[] @relation("ExerciseToMuscle")
+model TargetMuscle {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String?
+  exercise    Exercise[] @relation("ExerciseToMuscle")
 }
 
 model Equipment {
   id          Int        @id @default(autoincrement())
   name        String     @unique
   description String?
-  exercises   Exercise[] @relation("ExerciseToEquipment")
+  exercise    Exercise[] @relation("ExerciseToEquipment")
 }
 
-model ExerciseInstruction {
-  id          Int      @id @default(autoincrement())
-  exerciseId  Int
-  instruction String
-  exercise    Exercise @relation(fields: [exerciseId], references: [id])
-}
-
-enum ExerciseStatus {
+enum Status {
   ACTIVE
   FEATURED
   ARCHIVED

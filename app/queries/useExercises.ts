@@ -1,4 +1,4 @@
-import { Exercise, FeaturedExerciseOutputData } from "@/app/lib/definitions";
+import { Exercise, FeaturedExerciseOutputData, UpdateExercise } from "@/app/lib/definitions";
 import { useQuery } from "@tanstack/react-query";
 
 // TODO: Re-org these fn? Keep the tanstack hooks separate?
@@ -35,3 +35,20 @@ export const useExercise = (exerciseSlug: string) => {
     queryFn: () => fetchExercise(exerciseSlug),
   });
 };
+
+export const updateExercise = async (exerciseData: UpdateExercise): Promise<UpdateExercise> => {
+    
+  const response = await fetch("/api/exercises/update", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(exerciseData)
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to update exercise zoop");
+  }
+
+  // console.log(response.json());
+
+  return response.json();
+}

@@ -15,6 +15,15 @@ export type Exercise = {
   equipment: { name: string }[];
 };
 
+export type UpdateExercise = {
+  name: string;
+  description: string | null;
+  difficulty: Difficulty;
+  targetedMuscles: { id: string }[];
+  muscleGroups: { id: string }[];
+  equipment: { id: string }[];
+}
+
 // naming is hard
 export type ExerciseDetailObjectShape = {
   id: number;

@@ -35,7 +35,7 @@ const DetailOptions = ({
                 <input
                   type="checkbox"
                   id={option.name}
-                  name={option.name}
+                  name={exerciseOption}
                   value={option.id}
                   defaultChecked={isCurrentOption}
                 />

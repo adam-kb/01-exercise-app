@@ -1,15 +1,45 @@
-import { Exercise as ExerciseType } from "@/app/lib/definitions";
+import { Exercise, UpdateExercise } from "@/app/lib/definitions";
 
 import { Difficulty } from "@prisma/client";
 import DetailOptions from "./edit/DetailOptions";
 import EditInput from "./edit/EditInput";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { updateExercise } from "@/app/queries/useExercises";
 
-const ExerciseEditForm = ({ exercise }: { exercise: ExerciseType }) => {
+const ExerciseEditForm = ({ exercise }: { exercise: Exercise }) => {
   const difficulties = Object.values(Difficulty);
+  // const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: updateExercise,
+    onSuccess: () => {
+      // queryClient.invalidateQueries({ queryKey: ['exercises'] })
+    },
+    onError: (error: unknown) => {
+      console.error('Error in mutation:', error);
+    },
+  });
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    
+    const data = {
+      name: formData.get('name') as string,
+      description: formData.get('description') as string,
+      difficulty: formData.get('difficulty') as Difficulty,
+      muscleGroups: (formData.getAll('muscleGroup') as string[]).map((id) => ({ id })),
+      targetedMuscles: (formData.getAll('targetedMuscle') as string[]).map((id) => ({ id })),
+      equipment: (formData.getAll('equipment') as string[]).map((id) => ({ id })),
+    };
+
+    mutation.mutate(data);
+  }
 
   return (
     <main>
-      <form action="">
+      <form onSubmit={handleSubmit}>
         <div className="rounded-md bg-gray-50 p-4 md:p-6">
           <h2 className="text-3xl font-bold mb-8">Edit Exercise</h2>
           {/* Exercise Name */}
@@ -69,6 +99,7 @@ const ExerciseEditForm = ({ exercise }: { exercise: ExerciseType }) => {
             outputName="Muscle Groups"
           />
         </div>
+        <button type="submit">Submit Changes</button>
       </form>
     </main>
   );
