@@ -19,8 +19,9 @@ export const PUT = async (request: Request) => {
       data: {
         name: data.name,
         description: data.description,
+        instruction: data.instruction,
         difficulty: data.difficulty,
-        targetedMuscles: {
+        targetMuscle: {
           // set: targetedMuscles
         }
       }

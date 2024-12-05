@@ -24,11 +24,12 @@ const ExerciseEditForm = ({ exercise }: { exercise: Exercise }) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    
+
     const data = {
       name: formData.get('name') as string,
       description: formData.get('description') as string,
       difficulty: formData.get('difficulty') as Difficulty,
+      instruction: formData.get('instruction') as string,
       muscleGroups: (formData.getAll('muscleGroup') as string[]).map((id) => ({ id })),
       targetedMuscles: (formData.getAll('targetedMuscle') as string[]).map((id) => ({ id })),
       equipment: (formData.getAll('equipment') as string[]).map((id) => ({ id })),
@@ -56,6 +57,16 @@ const ExerciseEditForm = ({ exercise }: { exercise: Exercise }) => {
             placeholder="An Exercise involving..."
             defaultValue={
               exercise.description || "A description of the exercise..."
+            }
+            type="textarea"
+          />
+          {/* Exercise Instruction */}
+          <EditInput
+            label="Exercise Instruction"
+            name="instruction"
+            placeholder="An Exercise involving..."
+            defaultValue={
+              exercise.instruction || "Put your left foot in..."
             }
             type="textarea"
           />
@@ -89,13 +100,13 @@ const ExerciseEditForm = ({ exercise }: { exercise: Exercise }) => {
           {/* TargetedMuscle */}
           <DetailOptions
             exerciseOption="targetedMuscle"
-            currentValues={exercise.targetedMuscles}
+            currentValues={exercise.targetMuscle}
             outputName="Targeted Muscles"
           />
           {/* MuscleGroup */}
           <DetailOptions
             exerciseOption="muscleGroup"
-            currentValues={exercise.muscleGroups}
+            currentValues={exercise.muscleGroup}
             outputName="Muscle Groups"
           />
         </div>

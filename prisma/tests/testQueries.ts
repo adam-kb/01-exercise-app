@@ -1,4 +1,4 @@
-import { ExerciseStatus, PrismaClient } from "@prisma/client";
+import { Status as ExerciseStatus, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient({
   log: [{ level: 'query', emit: 'event' }],
@@ -39,7 +39,7 @@ const main = async () => {
   //   }
   // });
 
-  const featuredExercises = await prisma.featuredExercise.findMany({
+  const featuredExercises = await prisma.featureExercise.findMany({
     where: {
       exercise: {
         status: ExerciseStatus.ACTIVE
@@ -48,8 +48,8 @@ const main = async () => {
     include: {
       exercise: {
         include: {
-          muscleGroups: true,
-          targetedMuscles: true,
+          muscleGroup: true,
+          targetMuscle: true,
           equipment: true
         },
       },

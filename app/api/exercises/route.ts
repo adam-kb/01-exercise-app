@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
-import { ExerciseStatus } from "@prisma/client";
-import { FeaturedExerciseOutputData } from "@/app/lib/definitions";
+import { Status as ExerciseStatus } from "@prisma/client";
+import { FeatureExerciseOutputData } from "@/app/lib/definitions";
 
 export const GET = async () => {
   try {
-    const featuredExercises: FeaturedExerciseOutputData[] =
-      await prisma.featuredExercise.findMany({
+    const featureExercises: FeatureExerciseOutputData[] =
+      await prisma.featureExercise.findMany({
         where: {
           exercise: {
             status: ExerciseStatus.ACTIVE,
@@ -20,10 +20,11 @@ export const GET = async () => {
               slug: true,
               description: true,
               difficulty: true,
-              targetedMuscles: {
+              instruction: true,
+              targetMuscle: {
                 select: { name: true },
               },
-              muscleGroups: {
+              muscleGroup: {
                 select: { name: true },
               },
               equipment: {
@@ -37,7 +38,7 @@ export const GET = async () => {
         },
       });
 
-    return NextResponse.json(featuredExercises, { status: 200 });
+    return NextResponse.json(featureExercises, { status: 200 });
   } catch (error) {
     console.error("Error fetching exercises.", error);
 

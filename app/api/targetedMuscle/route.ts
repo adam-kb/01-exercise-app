@@ -3,7 +3,7 @@ import prisma from "@/app/lib/prisma";
 
 export const GET = async () => {
   try {
-    const targetedMuscles = await prisma.targetedMuscle.findMany();
+    const targetedMuscles = await prisma.targetMuscle.findMany();
 
     if (!targetedMuscles) {
       throw new Error("Error fetching Targeted Muscles");

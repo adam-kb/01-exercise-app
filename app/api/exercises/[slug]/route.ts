@@ -24,11 +24,12 @@ export const GET = async (
         name: true,
         slug: true,
         description: true,
+        instruction: true,
         difficulty: true,
-        targetedMuscles: {
+        targetMuscle: {
           select: { name: true },
         },
-        muscleGroups: {
+        muscleGroup: {
           select: { name: true },
         },
         equipment: {

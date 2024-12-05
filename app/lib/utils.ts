@@ -1,5 +1,5 @@
 import prisma from "@/app/lib/prisma";
-import { ExerciseStatus } from "@prisma/client";
+import { Status as ExerciseStatus } from "@prisma/client";
 import { ValidateExerciseOptions } from "./definitions";
 
 // TODO: Does this belong here? If not, where? Is this a util?

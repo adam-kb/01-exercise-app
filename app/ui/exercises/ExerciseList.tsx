@@ -46,7 +46,7 @@ const ExerciseList = () => {
 
           <h2 className="font-bold">Muscle Groups</h2>
           <ul>
-            {exercise.muscleGroups.map((group) => (
+            {exercise.muscleGroup.map((group) => (
               <li key={group.name}>{group.name}</li>
             ))}
           </ul>

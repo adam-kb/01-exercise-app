@@ -1,7 +1,7 @@
 import {
   Prisma,
   Difficulty as ExerciseDifficulty,
-  ExerciseStatus,
+  Status as ExerciseStatus
 } from "@prisma/client";
 
 export type Exercise = {
@@ -10,8 +10,9 @@ export type Exercise = {
   slug: string;
   description: string | null;
   difficulty: Difficulty;
-  targetedMuscles: { name: string }[];
-  muscleGroups: { name: string }[];
+  instruction: string | null;
+  targetMuscle: { name: string }[];
+  muscleGroup: { name: string }[];
   equipment: { name: string }[];
 };
 
@@ -19,6 +20,7 @@ export type UpdateExercise = {
   name: string;
   description: string | null;
   difficulty: Difficulty;
+  instruction: string | null;
   targetedMuscles: { id: string }[];
   muscleGroups: { id: string }[];
   equipment: { id: string }[];
@@ -42,7 +44,7 @@ export type ExerciseLinkProps = {
 }
 
 // Represents the output of a FeaturedExercise query, including the associated exercise with selected fields.
-export type FeaturedExerciseOutputData = Prisma.FeaturedExerciseGetPayload<{
+export type FeatureExerciseOutputData = Prisma.FeatureExerciseGetPayload<{
   include: {
     exercise: {
       select: {
@@ -50,9 +52,10 @@ export type FeaturedExerciseOutputData = Prisma.FeaturedExerciseGetPayload<{
         name: true;
         slug: true;
         description: true;
+        instruction: true;
         difficulty: true;
-        muscleGroups: { select: { name: true } };
-        targetedMuscles: { select: { name: true } };
+        muscleGroup: { select: { name: true } };
+        targetMuscle: { select: { name: true } };
         equipment: { select: { name: true } };
       };
     };
@@ -66,4 +69,4 @@ export type ValidateExerciseOptions = {
 
 export type Equipment = ExerciseDetailObjectShape
 export type MuscleGroup = ExerciseDetailObjectShape
-export type TargetedMuscle = ExerciseDetailObjectShape
+export type TargetMuscle = ExerciseDetailObjectShape

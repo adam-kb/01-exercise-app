@@ -6,7 +6,7 @@ const main = async () => {
   const updateBenchPress = await prisma.exercise.update({
     where: { name: "Bench Press" },
     data: {
-      targetedMuscles: {
+      targetMuscle: {
         // connect: { id: 3},
         set: [{id: 1}, {id: 2}],
       }
@@ -21,8 +21,8 @@ const main = async () => {
       name: "Bench Press",
     },
     include: {
-      muscleGroups: true,
-      targetedMuscles: true
+      muscleGroup: true,
+      targetMuscle: true
     }
   });
 

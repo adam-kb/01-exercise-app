@@ -5,7 +5,7 @@ const Exercise = ({ exercise }: { exercise: ExerciseType }) => {
   return <main>
     <h1 className="text-3xl font-bold">{exercise.name}</h1>
     <p>{exercise.description}</p>
-
+    <p>{exercise.instruction}</p>
     <h3 className="text-xl text-gray-700 font-bold">Equipment Needed:</h3>
     <ul>
       {exercise.equipment && exercise.equipment.map(equipment => (
@@ -17,7 +17,7 @@ const Exercise = ({ exercise }: { exercise: ExerciseType }) => {
 
     <h3 className="text-xl text-gray-700 font-bold">Muscle Groups:</h3>
     <ul>
-      {exercise.muscleGroups && exercise.muscleGroups.map(group => (
+      {exercise.muscleGroup && exercise.muscleGroup.map(group => (
         <li key={group.name}>
           <span>{group.name}</span>
         </li>
@@ -26,8 +26,8 @@ const Exercise = ({ exercise }: { exercise: ExerciseType }) => {
 
     <h3 className="text-xl text-gray-700 font-bold">Targeted Muscles:</h3>
     <ul>
-    {exercise.targetedMuscles && exercise.targetedMuscles.map(muscles => (
-      <li key={muscles.name}>{muscles.name}</li>
+    {exercise.targetMuscle && exercise.targetMuscle.map(muscle => (
+      <li key={muscle.name}>{muscle.name}</li>
     ))}
     </ul>
   </main>

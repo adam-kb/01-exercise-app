@@ -10,20 +10,22 @@ const FormSchema = z.object({
   slug: z.string(),
   description: z.string().max(250, {message: "Please keep the description under 250 characters."}),
   difficulty: z.nativeEnum(Difficulty),
-  muscleGroups: z.array(z.string()),
-  targetMuscles: z.array(z.string()),
+  instruction: z.string().max(250, {message: "Please keep the description under 250 characters."}),
+  muscleGroup: z.array(z.string()),
+  targetMuscle: z.array(z.string()),
   equipment: z.array(z.string()),
 });
 
 const UpdateExercise = FormSchema.omit({id: true, slug: true});
 
 export const updateExercise = async (id: number, formData: FormData) => {
-  const {name, description, difficulty, muscleGroups, targetMuscles, equipment} = UpdateExercise.parse({
+  const {name, description, difficulty, muscleGroup, targetMuscle, equipment} = UpdateExercise.parse({
     name: formData.get('name'),
     description: formData.get('description'),
     difficulty: formData.get('difficulty'),
-    muscleGroups: formData.get('muscleGroups'),
-    targetMuscles: formData.get('targetMuscles'),
+    muscleGroup: formData.get('muscleGroups'),
+    instruction: formData.get('instruction'),
+    targetMuscle: formData.get('targetMuscles'),
     equipment: formData.get('equipment')
   });
 

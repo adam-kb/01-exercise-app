@@ -168,6 +168,7 @@ async function main() {
         slug: data.slug,
         description: data.description,
         difficulty: data.difficulty,
+        instruction: data.instruction,
         muscleGroup: { connect: data.muscleGroup },
         targetMuscle: { connect: data.targetMuscle },
         equipment: { connect: data.equipment ?? [] },
