@@ -31,3 +31,11 @@ export const isOptionCurrent = <T extends object>(
 ): boolean => {
   return currentValues.some((current) => current[key] === option[key]);
 };
+
+export const slugify = (name: string): string => {
+  return name
+    .toLowerCase() // Convert to lowercase
+    .trim() // Remove leading and trailing whitespace
+    .replace(/[\s]+/g, "-") // Replace spaces with hyphens
+    .replace(/[^\w-]+/g, ""); // Remove non-alphanumeric characters except hyphens
+};

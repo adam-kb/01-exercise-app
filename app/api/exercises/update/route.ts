@@ -1,35 +1,43 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
 import { UpdateExercise } from "@/app/lib/definitions";
-
-type MuscleGroupInput = {
-  id: string;
-};
+import { UpdateExerciseSchema } from "@/app/lib/actions";
+import { Prisma } from "@prisma/client";
 
 export const PUT = async (request: Request) => {
   try {
-    console.log('API route hit');
-    const data = await request.json() as UpdateExercise;
-    console.log('Data received in PUT:', data);
+    const exercisePayload = (await request.json()) as UpdateExercise;
 
-    const targetedMuscles: MuscleGroupInput[] = data.targetedMuscles.map(m => ({id: m.id}))
+    const data = UpdateExerciseSchema.parse(exercisePayload);
 
     const updatedExercise = await prisma.exercise.update({
-      where: { name: data.name},
+      where: { id: data.id },
       data: {
         name: data.name,
         description: data.description,
         instruction: data.instruction,
         difficulty: data.difficulty,
         targetMuscle: {
-          // set: targetedMuscles
-        }
-      }
-    })
+          set: data.targetMuscle?.map(({ id }) => ({ id })),
+        },
+        muscleGroup: {
+          set: data.muscleGroup?.map(({ id }) => ({ id })),
+        },
+        equipment: {
+          set: data.equipment?.map(({ id }) => ({ id })),
+        },
+      },
+    });
 
-    return NextResponse.json(data);
+    return NextResponse.json(updatedExercise);
   } catch (error) {
-    console.error('Error in API route:', error);
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      // Handle specific Prisma errors
+      return NextResponse.json({ error: "Database error: " + error.message }, { status: 400 });
+    }
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Unknown error" },
+      { status: 500 }
+    );
   }
-}
+};

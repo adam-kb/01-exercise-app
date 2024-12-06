@@ -1,19 +1,22 @@
-import { Exercise, UpdateExercise } from "@/app/lib/definitions";
+'use client'
 
+import { FetchedExercise } from "@/app/lib/definitions";
 import { Difficulty } from "@prisma/client";
-import DetailOptions from "./edit/DetailOptions";
-import EditInput from "./edit/EditInput";
+import { DetailOptions, EditInput } from "@/app/ui/FormInputs";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { updateExercise } from "@/app/queries/useExercises";
+import { useRouter } from "next/navigation";
 
-const ExerciseEditForm = ({ exercise }: { exercise: Exercise }) => {
+const ExerciseEditForm = ({ exercise }: { exercise: FetchedExercise }) => {
   const difficulties = Object.values(Difficulty);
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
   const mutation = useMutation({
     mutationFn: updateExercise,
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ['exercises'] })
+      queryClient.invalidateQueries({ queryKey: ['exercises'] });
+      router.push(`/exercises/${exercise.slug}`);
     },
     onError: (error: unknown) => {
       console.error('Error in mutation:', error);
@@ -26,12 +29,13 @@ const ExerciseEditForm = ({ exercise }: { exercise: Exercise }) => {
     const formData = new FormData(event.currentTarget);
 
     const data = {
+      id: formData.get('id') as string,
       name: formData.get('name') as string,
       description: formData.get('description') as string,
       difficulty: formData.get('difficulty') as Difficulty,
       instruction: formData.get('instruction') as string,
-      muscleGroups: (formData.getAll('muscleGroup') as string[]).map((id) => ({ id })),
-      targetedMuscles: (formData.getAll('targetedMuscle') as string[]).map((id) => ({ id })),
+      muscleGroup: (formData.getAll('muscleGroup') as string[]).map((id) => ({ id })),
+      targetMuscle: (formData.getAll('targetMuscle') as string[]).map((id) => ({ id })),
       equipment: (formData.getAll('equipment') as string[]).map((id) => ({ id })),
     };
 
@@ -43,6 +47,7 @@ const ExerciseEditForm = ({ exercise }: { exercise: Exercise }) => {
       <form onSubmit={handleSubmit}>
         <div className="rounded-md bg-gray-50 p-4 md:p-6">
           <h2 className="text-3xl font-bold mb-8">Edit Exercise</h2>
+          <input type="hidden" name="id" defaultValue={exercise.id} />
           {/* Exercise Name */}
           <EditInput
             label="Exercise Name"
@@ -66,7 +71,7 @@ const ExerciseEditForm = ({ exercise }: { exercise: Exercise }) => {
             name="instruction"
             placeholder="An Exercise involving..."
             defaultValue={
-              exercise.instruction || "Put your left foot in..."
+              exercise.instruction || "Instructions to perform exercise..."
             }
             type="textarea"
           />
@@ -99,9 +104,9 @@ const ExerciseEditForm = ({ exercise }: { exercise: Exercise }) => {
           />
           {/* TargetedMuscle */}
           <DetailOptions
-            exerciseOption="targetedMuscle"
+            exerciseOption="targetMuscle"
             currentValues={exercise.targetMuscle}
-            outputName="Targeted Muscles"
+            outputName="Target Muscles"
           />
           {/* MuscleGroup */}
           <DetailOptions

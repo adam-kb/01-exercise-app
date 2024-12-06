@@ -1,4 +1,9 @@
-import { Exercise, FeatureExerciseOutputData, UpdateExercise } from "@/app/lib/definitions";
+import {
+  FetchedExercise,
+  UpdateExercise,
+  CreateExercise,
+  FeatureExerciseOutputData,
+} from "@/app/lib/definitions";
 import { useQuery } from "@tanstack/react-query";
 
 // TODO: Re-org these fn? Keep the tanstack hooks separate?
@@ -19,7 +24,9 @@ export const useFeaturedExercises = () => {
   });
 };
 
-export const fetchExercise = async (exerciseSlug: string): Promise<Exercise> => {
+export const fetchExercise = async (
+  exerciseSlug: string
+): Promise<FetchedExercise> => {
   const response = await fetch(`/api/exercises/${exerciseSlug}`);
 
   if (!response.ok) {
@@ -36,19 +43,36 @@ export const useExercise = (exerciseSlug: string) => {
   });
 };
 
-export const updateExercise = async (exerciseData: UpdateExercise): Promise<UpdateExercise> => {
-    
+export const updateExercise = async (
+  exerciseData: UpdateExercise
+): Promise<UpdateExercise> => {
   const response = await fetch("/api/exercises/update", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(exerciseData)
+    body: JSON.stringify(exerciseData),
   });
 
   if (!response.ok) {
-    throw new Error("Unable to update exercise zoop");
+    const error = await response.json();
+    throw new Error(error.message || "Unable to update exercise.");
   }
 
-  // console.log(response.json());
+  return response.json();
+};
+
+export const createExercise = async (
+  exerciseData: CreateExercise
+): Promise<FetchedExercise> => {
+  const response = await fetch("/api/exercises/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(exerciseData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Unable to update exercise.");
+  }
 
   return response.json();
-}
+};

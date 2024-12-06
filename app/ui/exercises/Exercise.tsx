@@ -1,10 +1,12 @@
-import { Exercise as ExerciseType } from "@/app/lib/definitions";
+import { FetchedExercise } from "@/app/lib/definitions";
 
-const Exercise = ({ exercise }: { exercise: ExerciseType }) => {
+const Exercise = ({ exercise }: { exercise: FetchedExercise }) => {
 
   return <main>
     <h1 className="text-3xl font-bold">{exercise.name}</h1>
+    <h3 className="text-xl text-gray-700 font-bold">Description</h3>
     <p>{exercise.description}</p>
+    <h3 className="text-xl text-gray-700 font-bold">How to perform the {exercise.name}</h3>
     <p>{exercise.instruction}</p>
     <h3 className="text-xl text-gray-700 font-bold">Equipment Needed:</h3>
     <ul>

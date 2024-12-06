@@ -1,42 +1,18 @@
 import { Difficulty } from "@prisma/client";
 import { z } from "zod";
-import prisma from "./prisma";
-
-// const difficulties = ["Beginner", "Intermediate", "Advanced"] as const;
 
 const FormSchema = z.object({
-  id: z.number(),
+  id: z.coerce.number(),
   name: z.string().max(40, {message: "Please keep the name under 40 characters."}),
   slug: z.string(),
-  description: z.string().max(250, {message: "Please keep the description under 250 characters."}),
+  description: z.string().max(250, {message: "Please keep the description under 250 characters."}).optional(),
   difficulty: z.nativeEnum(Difficulty),
-  instruction: z.string().max(250, {message: "Please keep the description under 250 characters."}),
-  muscleGroup: z.array(z.string()),
-  targetMuscle: z.array(z.string()),
-  equipment: z.array(z.string()),
+  instruction: z.string().max(250, {message: "Please keep the description under 250 characters."}).optional(),
+  muscleGroup: z.array(z.object({id: z.coerce.number()})).optional(),
+  targetMuscle: z.array(z.object({id: z.coerce.number()})).optional(),
+  equipment: z.array(z.object({id: z.coerce.number()})).optional(),
 });
 
-const UpdateExercise = FormSchema.omit({id: true, slug: true});
+export const UpdateExerciseSchema = FormSchema.omit({slug: true});
 
-export const updateExercise = async (id: number, formData: FormData) => {
-  const {name, description, difficulty, muscleGroup, targetMuscle, equipment} = UpdateExercise.parse({
-    name: formData.get('name'),
-    description: formData.get('description'),
-    difficulty: formData.get('difficulty'),
-    muscleGroup: formData.get('muscleGroups'),
-    instruction: formData.get('instruction'),
-    targetMuscle: formData.get('targetMuscles'),
-    equipment: formData.get('equipment')
-  });
-
-  try {
-    const exerciseData = await prisma.exercise.findUnique({
-      where: { id },
-      // data: {
-        // .. What data? Do we know whats updated? Does it matter if the value is the same? Does prisma skip a record that is of identical value
-      // }
-    })
-  } catch (error) {
-    //
-  }
-}
+export const CreateExerciseSchema = FormSchema.omit({id: true, slug: true});

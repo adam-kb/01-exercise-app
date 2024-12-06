@@ -26,7 +26,7 @@ const EditInput = ({
           placeholder={placeholder}
           className={inputClasses}
           defaultValue={
-            defaultValue || "A description of the exercise"
+            defaultValue || ""
           }
         />
       </div>

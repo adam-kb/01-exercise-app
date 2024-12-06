@@ -3,13 +3,13 @@ import prisma from "@/app/lib/prisma";
 
 export const GET = async () => {
   try {
-    const targetedMuscles = await prisma.targetMuscle.findMany();
+    const targetMuscle = await prisma.targetMuscle.findMany();
 
-    if (!targetedMuscles) {
+    if (!targetMuscle) {
       throw new Error("Error fetching Targeted Muscles");
     }
 
-    return NextResponse.json(targetedMuscles, {status: 200});
+    return NextResponse.json(targetMuscle, {status: 200});
   } catch (error) {
     console.error("Error fetching Targeted Muscles:", error);
 

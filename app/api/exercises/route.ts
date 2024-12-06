@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
 import { Status as ExerciseStatus } from "@prisma/client";
-import { FeatureExerciseOutputData } from "@/app/lib/definitions";
+import { unifiedExerciseSelect } from "@/app/lib/definitions";
 
 export const GET = async () => {
   try {
-    const featureExercises: FeatureExerciseOutputData[] =
+    const featureExercises =
       await prisma.featureExercise.findMany({
         where: {
           exercise: {
@@ -14,23 +14,7 @@ export const GET = async () => {
         },
         include: {
           exercise: {
-            select: {
-              id: true,
-              name: true,
-              slug: true,
-              description: true,
-              difficulty: true,
-              instruction: true,
-              targetMuscle: {
-                select: { name: true },
-              },
-              muscleGroup: {
-                select: { name: true },
-              },
-              equipment: {
-                select: { name: true },
-              },
-            },
+            select: unifiedExerciseSelect
           },
         },
         orderBy: {

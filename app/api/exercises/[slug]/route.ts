@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
-import { Exercise } from "@/app/lib/definitions";
+import { FetchedExercise, unifiedExerciseSelect } from "@/app/lib/definitions";
 
 export const GET = async (
   request: Request,
@@ -16,26 +16,9 @@ export const GET = async (
   }
 
   try {
-    const exercise: Exercise | null = await prisma.exercise.findUnique({
+    const exercise: FetchedExercise | null = await prisma.exercise.findUnique({
       where: { slug: exerciseSlug },
-      select: {
-        status: true,
-        id: true,
-        name: true,
-        slug: true,
-        description: true,
-        instruction: true,
-        difficulty: true,
-        targetMuscle: {
-          select: { name: true },
-        },
-        muscleGroup: {
-          select: { name: true },
-        },
-        equipment: {
-          select: { name: true },
-        },
-      },
+      select: unifiedExerciseSelect
     });
 
     if (!exercise) {
