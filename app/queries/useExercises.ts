@@ -45,7 +45,7 @@ export const useExercise = (exerciseSlug: string) => {
 
 export const updateExercise = async (
   exerciseData: UpdateExercise
-): Promise<UpdateExercise> => {
+): Promise<FetchedExercise> => {
   const response = await fetch("/api/exercises/update", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
