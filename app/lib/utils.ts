@@ -26,10 +26,10 @@ export const isValidExercise = async ({
 
 export const isOptionCurrent = <T extends object>(
   option: T,
-  currentValues: T[],
+  currentValues: T[] | undefined,
   key: keyof T
 ): boolean => {
-  return currentValues.some((current) => current[key] === option[key]);
+  return !!currentValues?.some((current) => current[key] === option[key]);
 };
 
 export const slugify = (name: string): string => {

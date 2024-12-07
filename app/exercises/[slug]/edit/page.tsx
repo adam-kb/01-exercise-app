@@ -16,8 +16,6 @@ const EditPage = async ({
   
   const exerciseSlug = (await params).slug;
 
-  console.log(exerciseSlug);
-
   const slugExists = await isValidExercise({ slug: exerciseSlug });
 
   if (!slugExists) {
