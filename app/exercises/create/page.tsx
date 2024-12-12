@@ -1,7 +1,11 @@
 import ExerciseCreateform from "@/app/ui/exercises/ExerciseCreateForm";
 
 const CreateExercisePage = () => {
-  return <ExerciseCreateform />
+  return (
+    <main>
+      <ExerciseCreateform />
+    </main>
+  )
 };
 
 export default CreateExercisePage

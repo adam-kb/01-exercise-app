@@ -16,10 +16,14 @@ const EditPage = async ({
   
   const exerciseSlug = (await params).slug;
 
-  const slugExists = await isValidExercise({ slug: exerciseSlug });
+  const {exerciseStatus} = await isValidExercise({ slug: exerciseSlug });
 
-  if (!slugExists) {
+  if (!exerciseStatus) {
     notFound();
+  }
+
+  if(exerciseStatus === "ARCHIVED") {
+    return <p>Exercise has been archived.</p>
   }
 
   const queryClient = new QueryClient();

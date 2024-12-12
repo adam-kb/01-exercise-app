@@ -1,20 +1,22 @@
 'use client';
 
-import { FetchedExercise } from "@/app/lib/definitions";
-import { DetailOptions, DifficultySelect, EditInput } from "@/app/ui/FormInputs";
-
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { Difficulty } from "@prisma/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+
+import { FetchedExercise } from "@/app/lib/definitions";
+
 import { createExercise, updateExercise } from "@/app/queries/useExercises";
 
+import { DetailOptions, DifficultySelect, EditInput } from "@/app/ui/FormInputs";
+import ToggleStatus from "../ToggleStatus";
 
 type ExerciseFormProps = {
   mode: "create" | "update";
   exercise?: FetchedExercise
 };
 
-const ExerciseForm = ({ mode, exercise}: ExerciseFormProps) => {
+const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -25,7 +27,7 @@ const ExerciseForm = ({ mode, exercise}: ExerciseFormProps) => {
     onSuccess: (response) => {
       // Invalidate exercises query and navigate
       queryClient.invalidateQueries({ queryKey: ['exercises'] });
-      
+
       // For create, navigate to the new exercise's page
       // For update, navigate back to the exercise details
       const slug = 'slug' in response ? response.slug : exercise?.slug;
@@ -54,7 +56,7 @@ const ExerciseForm = ({ mode, exercise}: ExerciseFormProps) => {
 
     mutation.mutate(data);
   }
-  
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -110,7 +112,16 @@ const ExerciseForm = ({ mode, exercise}: ExerciseFormProps) => {
           outputName="Muscle Groups"
         />
       </div>
-      <button type="submit">Submit Changes</button>
+      <div className="flex gap-4 justify-end">
+        <div>
+          {exercise && <ToggleStatus id={exercise.id} currentStatus={exercise.status} />}
+        </div>
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 text-sm px-2 rounded">
+          {mode === "update" ? 'Update Exercise' : 'Create Exercise'}
+        </button>
+      </div>
     </form>
   );
 };

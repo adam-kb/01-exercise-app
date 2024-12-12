@@ -2,6 +2,7 @@
 
 import { useFeaturedExercises } from "@/app/queries/useExercises";
 import ExerciseLink from "./ExerciseLink";
+import Card from "@/app/ui/Card";
 
 const ExerciseList = () => {
   const {
@@ -27,29 +28,31 @@ const ExerciseList = () => {
     <ul>
       {flattenedFeaturedExercises.map((exercise) => (
         <li key={exercise.id} className="my-4">
-          <h1 className="text-2xl font-bold">
-            <ExerciseLink
-              href={`/exercises/${exercise.slug}`}
-              slug={exercise.slug}
-            >
-              {exercise.name}
-            </ExerciseLink>
-          </h1>
-          <p>{exercise.description}</p>
+          <Card>
+            <h1 className="text-2xl font-bold">
+              <ExerciseLink
+                href={`/exercises/${exercise.slug}`}
+                slug={exercise.slug}
+              >
+                {exercise.name}
+              </ExerciseLink>
+            </h1>
+            <p>{exercise.description}</p>
 
-          <h2 className="font-bold">Equipment:</h2>
-          <ul>
-            {exercise.equipment.map((equipment) => (
-              <li key={equipment.name}>{equipment.name}</li>
-            ))}
-          </ul>
+            <h2 className="font-bold">Equipment:</h2>
+            <ul>
+              {exercise.equipment.map((equipment) => (
+                <li key={equipment.name}>{equipment.name}</li>
+              ))}
+            </ul>
 
-          <h2 className="font-bold">Muscle Groups</h2>
-          <ul>
-            {exercise.muscleGroup.map((group) => (
-              <li key={group.name}>{group.name}</li>
-            ))}
-          </ul>
+            <h2 className="font-bold">Muscle Groups</h2>
+            <ul>
+              {exercise.muscleGroup.map((group) => (
+                <li key={group.name}>{group.name}</li>
+              ))}
+            </ul>
+          </Card>
         </li>
       ))}
     </ul>

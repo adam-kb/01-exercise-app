@@ -1,12 +1,12 @@
 import { isValidExercise } from "@/app/lib/utils";
 import { fetchExercise } from "@/app/queries/useExercises";
 import ExerciseDataWrapper from "@/app/ui/exercises/ExerciseDataWrapper";
+import { notFound } from "next/navigation";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { notFound } from "next/navigation";
 
 const ExercisePage = async ({
   params,
@@ -15,10 +15,14 @@ const ExercisePage = async ({
 }) => {
   const exerciseSlug = (await params).slug;
 
-  const slugExists = await isValidExercise({ slug: exerciseSlug });
+  const {exerciseStatus} = await isValidExercise({ slug: exerciseSlug });
 
-  if (!slugExists) {
+  if (!exerciseStatus) {
     notFound();
+  }
+
+  if(exerciseStatus === "ARCHIVED") {
+    return <p>Exercise has been archived.</p>
   }
 
   const queryClient = new QueryClient();

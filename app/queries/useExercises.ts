@@ -4,11 +4,12 @@ import {
   CreateExercise,
   FeatureExerciseOutputData,
 } from "@/app/lib/definitions";
+import { Status } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
 // TODO: Re-org these fn? Keep the tanstack hooks separate?
 const fetchFeaturedExercises = async () => {
-  const response = await fetch("/api/exercises");
+  const response = await fetch("/api/exercises/featured");
 
   if (!response.ok) {
     throw new Error("Error fetching exercises");
@@ -76,3 +77,21 @@ export const createExercise = async (
 
   return response.json();
 };
+
+export const updateExerciseStatus = async (
+  data: {id: number, exerciseStatus: Omit<Status, "FEATURED">}
+): Promise<{id: string, status: Omit<Status, "FEATURED">}> => {
+
+  const response = await fetch('/api/exercises/status', {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({id: data.id, status: data.exerciseStatus})
+  })
+
+  if(!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Unable to update exercise.");
+  }
+
+  return response.json();
+}

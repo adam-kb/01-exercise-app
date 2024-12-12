@@ -1,8 +1,8 @@
+import Card from "../Card";
 import ExerciseForm from "./ExerciseForm";
 
 const ExerciseCreateform = () => {
-
-  return <ExerciseForm mode="create" />;
+  return <Card><ExerciseForm mode="create" /></Card>;
 };
 
 export default ExerciseCreateform;

@@ -1,7 +1,8 @@
-import { isOptionCurrent } from "@/app/lib/utils";
-import { fetchExerciseDetailOptions } from "@/app/queries/useEquipment";
-import { Difficulty, Equipment } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
+import { Difficulty, Equipment } from "@prisma/client";
+import { fetchExerciseDetailOptions } from "@/app/queries/useEquipment";
+import { isOptionCurrent } from "@/app/lib/utils";
+import { FetchedCheckboxes } from "./Skeletons";
 
 const difficulties = Object.values(Difficulty);
 
@@ -21,7 +22,7 @@ export const DetailOptions = ({
 
   return (
     <div className="mb-4">
-      {isPending && <p>{`Loading ${outputName}`}</p>}
+      {isPending && <FetchedCheckboxes />}
 
       {isError && <p>{`Error Loading ${outputName}`}</p>}
 

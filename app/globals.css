@@ -17,5 +17,29 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: Arial, Helvetica, sans-serif; */
+}
+
+.shimmer {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+
+  background: linear-gradient(281deg, #a4a4a4, #a4a4a4, #a4a4a4, #f8f8f8, #a4a4a4, #a4a4a4, #a4a4a4, #a4a4a4, #f8f8f8);
+  background-size: 268%;
+  animation: gradient 4s infinite;
+  animation-timing-function: linear;
+}
+
+#modal dialog::backdrop {
+  background: rgba(30, 41, 59, 0.75);
+}
+
+@keyframes gradient {
+  0% {
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
+  }
 }

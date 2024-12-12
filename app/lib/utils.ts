@@ -6,22 +6,26 @@ import { ValidateExerciseOptions } from "./definitions";
 export const isValidExercise = async ({
   slug,
   id,
-}: ValidateExerciseOptions) => {
+}: ValidateExerciseOptions): Promise<{exerciseStatus: ExerciseStatus | null}> => {
   if (!slug && !id) {
-    throw new Error("Exercise ID or slug must be provided.");
+    return {exerciseStatus: null}
   }
 
   const exercise = await prisma.exercise.findFirst({
     where: {
       AND: [
-        { status: ExerciseStatus.ACTIVE },
+        // { status: ExerciseStatus.ACTIVE },
         {
           OR: [{ id, slug }],
         },
       ],
     },
   });
-  return exercise !== null;
+  console.log(exercise);
+  if(!exercise) {
+    throw new Error("Exercise not found")
+  }
+  return {exerciseStatus: exercise.status};
 };
 
 export const isOptionCurrent = <T extends object>(

@@ -4,7 +4,7 @@ const ExercisesPage = () => {
 
   return (
     <main>
-      <h2>Exercises Page</h2>
+      <h2 className="text-4xl font-bold text-slate-800">Exercises Page</h2>
       <ExerciseList />
     </main>
   )
