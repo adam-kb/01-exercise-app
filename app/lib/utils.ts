@@ -21,10 +21,11 @@ export const isValidExercise = async ({
       ],
     },
   });
-  console.log(exercise);
+
   if(!exercise) {
     throw new Error("Exercise not found")
   }
+  
   return {exerciseStatus: exercise.status};
 };
 

@@ -6,15 +6,25 @@ import { FetchedCheckboxes } from "./Skeletons";
 
 const difficulties = Object.values(Difficulty);
 
+type DetailProps = {
+  exerciseOption: string;
+  currentValues: { id: number; name: string }[] | undefined;
+  outputName: string;
+}
+
+type EditInputProps = {
+  label: string;
+  name: string;
+  placeholder: string;
+  defaultValue: string | undefined;
+  type?: string;
+}
+
 export const DetailOptions = ({
   exerciseOption,
   currentValues,
   outputName,
-}: {
-  exerciseOption: string;
-  currentValues: { id: number; name: string }[] | undefined;
-  outputName: string;
-}) => {
+}: DetailProps) => {
   const { data, isError, isPending } = useQuery({
     queryKey: [exerciseOption],
     queryFn: () => fetchExerciseDetailOptions<Equipment>(exerciseOption),
@@ -38,7 +48,7 @@ export const DetailOptions = ({
 
             return (
               <div key={option.name}>
-                <label htmlFor={option.name}>{option.name}</label>
+                <label htmlFor={option.name} className="mr-1">{option.name}</label>
                 <input
                   type="checkbox"
                   id={option.name}
@@ -61,13 +71,7 @@ export const EditInput = ({
   placeholder,
   defaultValue,
   type = "text",
-}: {
-  label: string;
-  name: string;
-  placeholder: string;
-  defaultValue: string | undefined;
-  type?: string;
-}) => {
+}: EditInputProps) => {
   const inputClasses =
     "peer block w-full rounded-md border border-gray-200 py-2 text-sm outline-2 placeholder:text-gray-500";
 

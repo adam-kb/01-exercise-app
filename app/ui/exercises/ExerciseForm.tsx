@@ -25,12 +25,14 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
   const mutation = useMutation({
     mutationFn,
     onSuccess: (response) => {
+      const slug = 'slug' in response ? response.slug : exercise?.slug;
+
       // Invalidate exercises query and navigate
-      queryClient.invalidateQueries({ queryKey: ['exercises'] });
+      // queryClient.invalidateQueries({ queryKey: ['exercises'] });
+      queryClient.invalidateQueries({ queryKey: ['exercises', slug] });
 
       // For create, navigate to the new exercise's page
       // For update, navigate back to the exercise details
-      const slug = 'slug' in response ? response.slug : exercise?.slug;
       router.push(`/exercises/${slug}`);
     },
     onError: (error: unknown) => {
@@ -57,10 +59,19 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
     mutation.mutate(data);
   }
 
+  let buttonText;
+
+if (mutation.isPending) {
+  buttonText = "Processing...";
+} else if (mode === "update") {
+  buttonText = "Update Exercise";
+} else {
+  buttonText = "Create Exercise";
+}
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        <h2 className="text-3xl font-bold mb-8">Edit Exercise</h2>
         {mode === "update" && (
           <input type="hidden" name="id" defaultValue={exercise?.id} />
         )}
@@ -119,7 +130,7 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
         <button
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 text-sm px-2 rounded">
-          {mode === "update" ? 'Update Exercise' : 'Create Exercise'}
+            {buttonText}
         </button>
       </div>
     </form>
