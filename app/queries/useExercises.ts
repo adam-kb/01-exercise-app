@@ -8,20 +8,32 @@ import { Status } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
 // TODO: Re-org these fn? Keep the tanstack hooks separate?
-const fetchFeaturedExercises = async () => {
-  const response = await fetch("/api/exercises/featured");
+
+export const fetchExercises = async ({
+  pageParam = 0,
+}: {
+  pageParam?: number;
+}): Promise<{ data: FetchedExercise[]; nextCursor: number | null }> => {
+  const baseUrl =
+    typeof window === "undefined" // Check for server-side execution
+      ? process.env.NEXT_PUBLIC_BASE_URL // Use environment variable for server
+      : "";
+
+  const response = await fetch(`${baseUrl}/api/exercises?cursor=${pageParam || ""}`, {
+    cache: "no-store",
+  });
 
   if (!response.ok) {
-    throw new Error("Error fetching exercises");
+    throw new Error("Error fetching exercise.");
   }
 
   return response.json();
 };
 
-export const useFeaturedExercises = () => {
-  return useQuery<FeatureExerciseOutputData[]>({
-    queryKey: ["exercises", "featured"],
-    queryFn: fetchFeaturedExercises,
+export const useExercises = () => {
+  return useQuery({
+    queryKey: ["exercises"],
+    queryFn: () => fetchExercises,
   });
 };
 
@@ -41,6 +53,25 @@ export const useExercise = (exerciseSlug: string) => {
   return useQuery({
     queryKey: ["exercises", exerciseSlug],
     queryFn: () => fetchExercise(exerciseSlug),
+  });
+};
+
+export const fetchFeaturedExercises = async (): Promise<
+  FeatureExerciseOutputData[]
+> => {
+  const response = await fetch("/api/exercises/featured");
+
+  if (!response.ok) {
+    throw new Error("Error fetching exercises");
+  }
+
+  return response.json();
+};
+
+export const useFeaturedExercises = () => {
+  return useQuery<FeatureExerciseOutputData[]>({
+    queryKey: ["exercises", "featured"],
+    queryFn: fetchFeaturedExercises,
   });
 };
 
@@ -78,20 +109,20 @@ export const createExercise = async (
   return response.json();
 };
 
-export const updateExerciseStatus = async (
-  data: {id: number, exerciseStatus: Omit<Status, "FEATURED">}
-): Promise<{id: string, status: Omit<Status, "FEATURED">}> => {
-
-  const response = await fetch('/api/exercises/status', {
+export const updateExerciseStatus = async (data: {
+  id: number;
+  exerciseStatus: Omit<Status, "FEATURED">;
+}): Promise<{ id: string; status: Omit<Status, "FEATURED"> }> => {
+  const response = await fetch("/api/exercises/status", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({id: data.id, status: data.exerciseStatus})
-  })
+    body: JSON.stringify({ id: data.id, status: data.exerciseStatus }),
+  });
 
-  if(!response.ok) {
+  if (!response.ok) {
     const error = await response.json();
     throw new Error(error.message || "Unable to update exercise.");
   }
 
   return response.json();
-}
+};
