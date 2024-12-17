@@ -3,7 +3,7 @@ import Providers from "./providers";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navigation from "./ui/header/Navigation";
+import Header from "./ui/header/Header";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,9 +33,7 @@ export default function RootLayout({
       >
         <Providers>
           <div id="modal"></div>
-          <header>
-            <Navigation />
-          </header>
+          <Header />
           {children}
         </Providers>
       </body>

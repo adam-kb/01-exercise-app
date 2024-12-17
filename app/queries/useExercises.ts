@@ -19,9 +19,12 @@ export const fetchExercises = async ({
       ? process.env.NEXT_PUBLIC_BASE_URL // Use environment variable for server
       : "";
 
-  const response = await fetch(`${baseUrl}/api/exercises?cursor=${pageParam || ""}&limit=4`, {
-    cache: "no-store",
-  });
+  const response = await fetch(
+    `${baseUrl}/api/exercises?cursor=${pageParam || ""}&limit=4`,
+    {
+      cache: "no-store",
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Error fetching exercise.");
