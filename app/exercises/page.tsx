@@ -1,4 +1,3 @@
-// import { fetchExercises } from "../queries/useExercises";
 import {
   dehydrate,
   HydrationBoundary,

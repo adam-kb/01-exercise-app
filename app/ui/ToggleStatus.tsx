@@ -1,20 +1,22 @@
 "use client";
 
+import { updateExerciseStatus } from "@/app/queries/useExercises";
 import ConfirmModal from "@/app/ui/ConfirmModal";
 import { Status } from "@prisma/client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { updateExerciseStatus } from "@/app/queries/useExercises";
+import { getQueryClient } from "../getQueryClient";
 
 type ToggleStatusProps = {
   id: number;
   currentStatus: Omit<Status, "FEATURED">;
 };
-const getNextStatus = (status: Omit<Status, "FEATURED">) => (status === "ACTIVE" ? "ARCHIVED" : "ACTIVE");
+const getNextStatus = (status: Omit<Status, "FEATURED">) =>
+  status === "ACTIVE" ? "ARCHIVED" : "ACTIVE";
 
 const ToggleStatus = ({ id, currentStatus }: ToggleStatusProps) => {
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
   const router = useRouter();
   const [isDeactivating, setIsDeactivating] = useState(false);
 
@@ -41,7 +43,9 @@ const ToggleStatus = ({ id, currentStatus }: ToggleStatusProps) => {
           onCancel={() => setIsDeactivating(false)}
           status={isDeactivating}
           cancelText="Cancel"
-          confirmText={mutation.isPending ? "Processing..." : "Deactivate Exercise"}
+          confirmText={
+            mutation.isPending ? "Processing..." : "Deactivate Exercise"
+          }
         />
       )}
 

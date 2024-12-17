@@ -6,9 +6,11 @@
 // } from "@tanstack/react-query";
 // import Exercises from "@/app/ui/exercises/Exercises";
 
+// import { getQueryClient } from "@/app/getQueryClient";
+
 
 const FeaturedExercisePage = async () => {
-  // const queryClient = new QueryClient();
+  // const queryClient = getQueryClient();
 
   // const exercises = await queryClient.fetchQuery({
   //   queryKey: ["exercises", "featured"],

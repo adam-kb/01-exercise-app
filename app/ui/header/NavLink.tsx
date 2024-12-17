@@ -5,34 +5,28 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
-type Props = {
+type NavLinkProps = {
   href: string;
   children: ReactNode;
   mode?: "desktop" | "mobile";
-}
+};
 
 const NavLink = ({
   href,
   children,
   mode = "desktop",
   ...props
-}: Props ) => {
+}: NavLinkProps) => {
   const path = usePathname();
 
-  const classes = clsx(
-    "rounded-md px-3 py-2 text-sm font-medium",
-    {
-      "block": mode === "mobile",
-      "bg-gray-900 hover:bg-gray-950 text-white": path === href,
-      "text-gray-300 hover:bg-gray-700 hover:text-white": path !== href,
-    }
-  );
+  const classes = clsx("rounded-md px-3 py-2 text-sm font-medium", {
+    "block": mode === "mobile",
+    "bg-gray-900 hover:bg-gray-950 text-white": path === href,
+    "text-gray-300 hover:bg-gray-700 hover:text-white": path !== href,
+  });
 
   return (
-    <Link
-      href={href}
-      {...props}
-      className={classes}>
+    <Link href={href} className={classes} {...props}>
       {children}
     </Link>
   );

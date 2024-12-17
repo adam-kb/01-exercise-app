@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Difficulty } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
@@ -8,36 +8,37 @@ import { FetchedExercise } from "@/app/lib/definitions";
 
 import { createExercise, updateExercise } from "@/app/queries/useExercises";
 
-import { DetailOptions, DifficultySelect, EditInput } from "@/app/ui/FormInputs";
+import {
+  DetailOptions,
+  DifficultySelect,
+  EditInput,
+} from "@/app/ui/FormInputs";
 import ToggleStatus from "../ToggleStatus";
 import { getQueryClient } from "@/app/getQueryClient";
 
 type ExerciseFormProps = {
   mode: "create" | "update";
-  exercise?: FetchedExercise
+  exercise?: FetchedExercise;
 };
 
 const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
   const queryClient = getQueryClient();
   const router = useRouter();
 
-  const mutationFn = mode === 'update' ? updateExercise : createExercise;
+  const mutationFn = mode === "update" ? updateExercise : createExercise;
 
   const mutation = useMutation({
     mutationFn,
     onSuccess: (response) => {
-      const slug = 'slug' in response ? response.slug : exercise?.slug;
+      const slug = "slug" in response ? response.slug : exercise?.slug;
 
-      // Invalidate exercises query and navigate
       // queryClient.invalidateQueries({ queryKey: ['exercises'] });
-      queryClient.invalidateQueries({ queryKey: ['exercises', slug] });
+      queryClient.invalidateQueries({ queryKey: ["exercises", slug] });
 
-      // For create, navigate to the new exercise's page
-      // For update, navigate back to the exercise details
       router.push(`/exercises/${slug}`);
     },
     onError: (error: unknown) => {
-      console.error('Error in mutation:', error);
+      console.error("Error in mutation:", error);
     },
   });
 
@@ -47,28 +48,34 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
     const formData = new FormData(event.currentTarget);
 
     const data = {
-      id: formData.get('id') as string,
-      name: formData.get('name') as string,
-      description: formData.get('description') as string,
-      difficulty: formData.get('difficulty') as Difficulty,
-      instruction: formData.get('instruction') as string,
-      muscleGroup: (formData.getAll('muscleGroup') as string[]).map((id) => ({ id })),
-      targetMuscle: (formData.getAll('targetMuscle') as string[]).map((id) => ({ id })),
-      equipment: (formData.getAll('equipment') as string[]).map((id) => ({ id })),
+      id: formData.get("id") as string,
+      name: formData.get("name") as string,
+      description: formData.get("description") as string,
+      difficulty: formData.get("difficulty") as Difficulty,
+      instruction: formData.get("instruction") as string,
+      muscleGroup: (formData.getAll("muscleGroup") as string[]).map((id) => ({
+        id,
+      })),
+      targetMuscle: (formData.getAll("targetMuscle") as string[]).map((id) => ({
+        id,
+      })),
+      equipment: (formData.getAll("equipment") as string[]).map((id) => ({
+        id,
+      })),
     };
 
     mutation.mutate(data);
-  }
+  };
 
   let buttonText;
 
-if (mutation.isPending) {
-  buttonText = "Processing...";
-} else if (mode === "update") {
-  buttonText = "Update Exercise";
-} else {
-  buttonText = "Create Exercise";
-}
+  if (mutation.isPending) {
+    buttonText = "Processing...";
+  } else if (mode === "update") {
+    buttonText = "Update Exercise";
+  } else {
+    buttonText = "Create Exercise";
+  }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -126,12 +133,15 @@ if (mutation.isPending) {
       </div>
       <div className="flex gap-4 justify-end">
         <div>
-          {exercise && <ToggleStatus id={exercise.id} currentStatus={exercise.status} />}
+          {exercise && (
+            <ToggleStatus id={exercise.id} currentStatus={exercise.status} />
+          )}
         </div>
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 text-sm px-2 rounded">
-            {buttonText}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 text-sm px-2 rounded"
+        >
+          {buttonText}
         </button>
       </div>
     </form>

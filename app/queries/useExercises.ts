@@ -7,20 +7,21 @@ import {
 import { Status } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
-// TODO: Re-org these fn? Keep the tanstack hooks separate?
+type InfinitePaginatedResponse = {
+  data: FetchedExercise[];
+  nextCursor: number | null;
+};
 
 export const fetchExercises = async ({
   pageParam = 0,
-}: {
-  pageParam?: number;
-}): Promise<{ data: FetchedExercise[]; nextCursor: number | null }> => {
+}): Promise<InfinitePaginatedResponse> => {
   const baseUrl =
-    typeof window === "undefined" // Check for server-side execution
-      ? process.env.NEXT_PUBLIC_BASE_URL // Use environment variable for server
-      : "";
+    typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+  const cursorPosition = pageParam || "";
 
   const response = await fetch(
-    `${baseUrl}/api/exercises?cursor=${pageParam || ""}&limit=4`,
+    `${baseUrl}/api/exercises?cursor=${cursorPosition}&limit=4`,
     {
       cache: "no-store",
     }
