@@ -5,8 +5,8 @@ import ExerciseDataWrapper from "@/app/ui/exercises/ExerciseDataWrapper";
 import {
   dehydrate,
   HydrationBoundary,
-  QueryClient,
 } from "@tanstack/react-query";
+import { getQueryClient } from "@/app/getQueryClient";
 
 const EditPage = async ({
   params,
@@ -26,7 +26,7 @@ const EditPage = async ({
     return <p>Exercise has been archived.</p>
   }
 
-  const queryClient = new QueryClient();
+  const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: ["exercises", exerciseSlug],

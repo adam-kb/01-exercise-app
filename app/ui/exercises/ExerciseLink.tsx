@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { ExerciseLinkProps } from "@/app/lib/definitions";
 import { fetchExercise } from "@/app/queries/useExercises";
-import { useQueryClient } from "@tanstack/react-query";
+import { getQueryClient } from "@/app/getQueryClient";
 
 const ExerciseLink = ({
   href,
   slug: exerciseSlug,
   children,
 }: ExerciseLinkProps) => {
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
 
   const handleInteraction = () => {
     queryClient.prefetchQuery({

@@ -1,7 +1,7 @@
 'use client';
 
 import { Difficulty } from "@prisma/client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { FetchedExercise } from "@/app/lib/definitions";
@@ -10,6 +10,7 @@ import { createExercise, updateExercise } from "@/app/queries/useExercises";
 
 import { DetailOptions, DifficultySelect, EditInput } from "@/app/ui/FormInputs";
 import ToggleStatus from "../ToggleStatus";
+import { getQueryClient } from "@/app/getQueryClient";
 
 type ExerciseFormProps = {
   mode: "create" | "update";
@@ -17,7 +18,7 @@ type ExerciseFormProps = {
 };
 
 const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
-  const queryClient = useQueryClient();
+  const queryClient = getQueryClient();
   const router = useRouter();
 
   const mutationFn = mode === 'update' ? updateExercise : createExercise;

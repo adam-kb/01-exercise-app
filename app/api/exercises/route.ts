@@ -6,16 +6,16 @@ import { unifiedExerciseSelect } from "@/app/lib/definitions";
 
 export const GET = async (request: NextRequest) => {
   try {
-    const cursor = request.nextUrl.searchParams.get("cursor");
-    const limit = 4;
+    const cursor = parseInt(request.nextUrl.searchParams.get("cursor") || "0", 10);
+    const limit = parseInt(request.nextUrl.searchParams.get("limit") || "4", 10);
 
     const exercises = await prisma.exercise.findMany({
       where: { status: ExerciseStatus.ACTIVE },
       select: unifiedExerciseSelect,
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: "asc" },
       skip: cursor ? 1 : 0,
       take: limit,
-      cursor: cursor ? { id: parseInt(cursor, 10) } : undefined
+      cursor: cursor ? { id: cursor } : undefined
     });
 
     const nextCursor = exercises.length === limit

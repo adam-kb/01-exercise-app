@@ -1,9 +1,14 @@
 import { FetchedExercise } from "@/app/lib/definitions";
+import Link from "next/link";
 
 const Exercise = ({ exercise }: { exercise: FetchedExercise }) => {
   return (
     <main>
-      <h1 className="text-3xl font-bold">{exercise.name}</h1>
+      <h1 className="text-3xl font-bold">
+        <Link href={`/exercises/${exercise.slug}`}>
+        {exercise.name}
+        </Link>
+        </h1>
       <h3 className="text-xl text-gray-700 font-bold">Description</h3>
       <p>{exercise.description}</p>
       <h3 className="text-xl text-gray-700 font-bold">

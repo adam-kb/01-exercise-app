@@ -2,17 +2,19 @@
 import {
   dehydrate,
   HydrationBoundary,
-  QueryClient,
 } from "@tanstack/react-query";
 import Exercises from "@/app/ui/exercises/Exercises";
+import { fetchExercises } from "../queries/useExercises";
+import { getQueryClient } from "../getQueryClient";
 
 const ExercisesPage = async () => {
-  const queryClient = new QueryClient();
+  const queryClient = getQueryClient();
 
-  // const exercises = await queryClient.fetchQuery({
-  //   queryKey: ["exercises"],
-  //   queryFn: fetchExercises,
-  // });
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: ["exercises"],
+    queryFn: ({ pageParam = 0 }) => fetchExercises({ pageParam }),
+    initialPageParam: 0
+  });
 
   return (
     <main>

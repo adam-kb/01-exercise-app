@@ -1,15 +1,15 @@
 "use client";
 
-import Exercise from "./Exercise";
+import { fetchExercises } from "@/app/queries/useExercises";
 import Card from "@/app/ui/Card";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { fetchExercises } from "@/app/queries/useExercises";
+import { useEffect } from "react";
+import { useInView } from 'react-intersection-observer';
 import Loading from "../Loading";
-import { useInView } from 'react-intersection-observer'
-import React, { useEffect } from "react";
+import Exercise from "./Exercise";
 
 const Exercises = () => {
-  const {ref, inView } = useInView();
+  const { ref, inView } = useInView();
 
   const {
     data,
@@ -27,7 +27,7 @@ const Exercises = () => {
   })
 
   useEffect(() => {
-    if(inView) {
+    if (inView) {
       fetchNextPage()
     }
   }, [fetchNextPage, inView])
@@ -40,17 +40,14 @@ const Exercises = () => {
   ) : (
     <>
       <ul>
-        {data.pages.map((group, i) => (
-          <React.Fragment key={i}>
-            {group.data.map((exercise) => (
-              <li key={exercise.id}>
-                <Card>
-                  <Exercise exercise={exercise} />
-                </Card>
-              </li>
-            ))}
-          </React.Fragment>
-        ))}
+        {data.pages.flatMap(group => group.data)
+          .map((exercise) => (
+            <li key={exercise.id}>
+              <Card>
+                <Exercise exercise={exercise} />
+              </Card>
+            </li>
+          ))}
       </ul>
       <div>
         <button
