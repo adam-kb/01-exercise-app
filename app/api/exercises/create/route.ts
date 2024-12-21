@@ -8,7 +8,6 @@ import { slugify } from "@/app/lib/utils";
 export const POST = async (request: Request) => {
   try {
     const exercisePayload = (await request.json()) as CreateExercise;
-    console.log(exercisePayload);
 
     const data = CreateExerciseSchema.parse(exercisePayload);
 

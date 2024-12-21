@@ -10,6 +10,15 @@ prisma.$on('query', (e) => {
 });
 
 const main = async () => {
+
+      // async function checkVersion() {
+    //   const result = await prisma.$queryRaw`SELECT version();`;
+    //   console.log(result);
+    //   await prisma.$disconnect();
+    // }
+    
+    // checkVersion();
+
   // const featuredExerciseIds = await prisma.featuredExercise.findMany({
   //   where: {
   //     exercise: {

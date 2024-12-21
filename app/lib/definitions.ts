@@ -89,3 +89,19 @@ export type ExerciseLinkProps = {
 }
 
 export type MutateFn<TInput, TOutput> = (data: TInput) => Promise<TOutput>;
+
+export type QueryResponse = {
+  [key: string]: string
+};
+
+export type ExerciseWithRelations = Prisma.ExerciseGetPayload<{
+  include: {
+    equipment: true;
+    muscleGroup: true;
+    targetMuscle: true;
+  };
+}>;
+
+export type SearchResponse = {
+  exercises: ExerciseWithRelations[];
+};
