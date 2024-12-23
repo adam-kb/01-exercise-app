@@ -16,6 +16,7 @@ model Exercise {
   instruction     String?
   difficulty      Difficulty            @default(Beginner)
   status          Status                @default(ACTIVE)
+  media           Media[]               @relation("ExerciseMedia")
   featured        FeatureExercise?
   equipment       Equipment[]           @relation("ExerciseToEquipment")
   muscleGroup     MuscleGroup[]         @relation("ExerciseToGroup")
@@ -52,6 +53,15 @@ model Equipment {
   exercise    Exercise[] @relation("ExerciseToEquipment")
 }
 
+model Media {
+  id          Int       @id @default(autoincrement())
+  mediaKey    String
+  type        MediaType
+  exercise    Exercise @relation("ExerciseMedia", fields: [exerciseId], references: [id])
+  exerciseId  Int
+  createdAt   DateTime @default(now())
+}
+
 enum Status {
   ACTIVE
   FEATURED
@@ -62,4 +72,9 @@ enum Difficulty {
   Beginner
   Intermediate
   Advanced
+}
+
+enum MediaType {
+  THUMBNAIL
+  VIDEO
 }

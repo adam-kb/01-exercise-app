@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres-exercise
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "secretcircle"
+      POSTGRES_DB: "exerciseapp"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  media-server:
+    build:
+      context: ./media-server
+    container_name: media_server
+    ports:
+      - "8080:80"
+    volumes:
+      - ./media:/usr/share/nginx/html/media
+volumes:
+  postgres-data:
+    driver: local
