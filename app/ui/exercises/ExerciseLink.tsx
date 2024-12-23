@@ -12,6 +12,8 @@ const ExerciseLink = ({
 }: ExerciseLinkProps) => {
   const queryClient = getQueryClient();
 
+  const url = href || `/exercises/${exerciseSlug}`;
+
   const handleInteraction = () => {
     queryClient.prefetchQuery({
       queryKey: ["exercises", exerciseSlug],
@@ -20,15 +22,13 @@ const ExerciseLink = ({
   };
 
   return (
-    <>
       <Link
-        href={href}
+        href={url}
         onMouseEnter={handleInteraction}
         onFocus={handleInteraction}
       >
         {children}
       </Link>
-    </>
   );
 };
 

@@ -1,7 +1,7 @@
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "../getQueryClient";
-import { ExerciseWithRelations } from "../lib/definitions";
 import { fetchSearchResults } from "../queries/useSearchResults";
-import ExerciseLink from "../ui/exercises/ExerciseLink";
+import SearchResults from "../ui/search/SearchResults";
 
 const SearchResultsPage = async ({
   searchParams,
@@ -11,8 +11,8 @@ const SearchResultsPage = async ({
   const searchQuery = (await searchParams).query;
   const queryClient = getQueryClient();
 
-  const results: ExerciseWithRelations[] = await queryClient.fetchQuery({
-    queryKey: [searchQuery],
+  await queryClient.prefetchQuery({
+    queryKey: ["search", searchQuery],
     queryFn: () => fetchSearchResults(searchQuery),
   });
 
@@ -20,22 +20,10 @@ const SearchResultsPage = async ({
     <main>
       <h1>Search Results</h1>
       <p>Search Query: {searchQuery}</p>
-      <div className="flex gap-4 flex-col">
-        {results.length ? (
-          results.map((exercise) => (
-            <div key={exercise.id}>
-              <ExerciseLink
-                href={`/exercises/${exercise.slug}`}
-                slug={exercise.slug}
-              >
-                {exercise.name}
-              </ExerciseLink>
-            </div>
-          ))
-        ) : (
-          <p>No Exercises found for &quot;{searchQuery}&quot;</p>
-        )}
-      </div>
+
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <SearchResults searchQuery={searchQuery} />
+      </HydrationBoundary>
     </main>
   );
 };

@@ -6,7 +6,7 @@ export const fetchSearchResults = async (
   const baseUrl =
     typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
-  const response = await fetch(`${baseUrl}/api/search?query=${searchQuery}`);
+  const response = await fetch(`${baseUrl}/api/search?query=${encodeURIComponent(searchQuery)}`);
 
   if (!response.ok) {
     throw new Error("Error fetching search results.");

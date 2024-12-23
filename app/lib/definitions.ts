@@ -83,7 +83,7 @@ export type MuscleGroup = ExerciseDetailObjectShape
 export type TargetMuscle = ExerciseDetailObjectShape
 
 export type ExerciseLinkProps = {
-  href: string;
+  href?: string;
   slug: string;
   children: string;
 }
