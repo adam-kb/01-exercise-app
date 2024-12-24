@@ -1,4 +1,8 @@
-import { Prisma, Difficulty as ExerciseDifficulty, Status as ExerciseStatus } from "@prisma/client";
+import {
+  Prisma,
+  Difficulty as ExerciseDifficulty,
+  Status as ExerciseStatus,
+} from "@prisma/client";
 
 // Reusable Select Objects for Queries
 export const unifiedExerciseSelect = {
@@ -9,6 +13,7 @@ export const unifiedExerciseSelect = {
   instruction: true,
   difficulty: true,
   status: true,
+  media: { select: { mediaKey: true, type: true} },
   targetMuscle: { select: { id: true, name: true } }, // Unified: Fetch both `id` and `name`
   muscleGroup: { select: { id: true, name: true } },
   equipment: { select: { id: true, name: true } },
@@ -31,7 +36,10 @@ export type MinimalExercise = Prisma.ExerciseGetPayload<{
 }>;
 
 // CRUD Operation Types
-export type CreateExercise = Omit<UnifiedExercise, "id" | "slug" | "status" | "targetMuscle" | "muscleGroup" | "equipment"> & {
+export type CreateExercise = Omit<
+  UnifiedExercise,
+  "id" | "slug" | "status" | "targetMuscle" | "muscleGroup" | "equipment"
+> & {
   targetMuscle: { id: string }[]; // Use `id` for creating/updating
   muscleGroup: { id: string }[];
   equipment: { id: string }[];
@@ -76,22 +84,22 @@ export type ExerciseDetailObjectShape = {
   id: number;
   name: string;
   description?: string;
-}
+};
 
-export type Equipment = ExerciseDetailObjectShape
-export type MuscleGroup = ExerciseDetailObjectShape
-export type TargetMuscle = ExerciseDetailObjectShape
+export type Equipment = ExerciseDetailObjectShape;
+export type MuscleGroup = ExerciseDetailObjectShape;
+export type TargetMuscle = ExerciseDetailObjectShape;
 
 export type ExerciseLinkProps = {
   href?: string;
   slug: string;
   children: string;
-}
+};
 
 export type MutateFn<TInput, TOutput> = (data: TInput) => Promise<TOutput>;
 
 export type QueryResponse = {
-  [key: string]: string
+  [key: string]: string;
 };
 
 export type ExerciseWithRelations = Prisma.ExerciseGetPayload<{
@@ -105,3 +113,7 @@ export type ExerciseWithRelations = Prisma.ExerciseGetPayload<{
 export type SearchResponse = {
   exercises: ExerciseWithRelations[];
 };
+
+export type ExerciseMedia = {
+  media: { select: { mediaKey: true} }
+}

@@ -1,14 +1,19 @@
 import { FetchedExercise } from "@/app/lib/definitions";
 import Link from "next/link";
+import ExerciseThumbnail from "./ExerciseThumbnail";
 
 const Exercise = ({ exercise }: { exercise: FetchedExercise }) => {
   return (
     <main>
+      {exercise.media.length > 0 && exercise.media.map(item => (
+        <ExerciseThumbnail key={item.mediaKey} media={item} />
+      ))}
+
       <h1 className="text-3xl font-bold">
         <Link href={`/exercises/${exercise.slug}`}>
-        {exercise.name}
+          {exercise.name}
         </Link>
-        </h1>
+      </h1>
       <h3 className="text-xl text-gray-700 font-bold">Description</h3>
       <p>{exercise.description}</p>
       <h3 className="text-xl text-gray-700 font-bold">

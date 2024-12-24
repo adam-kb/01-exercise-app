@@ -14,7 +14,7 @@ const ExercisesPage = async () => {
     queryFn: ({ pageParam = 0 }) => fetchExercises({ pageParam }),
     initialPageParam: 0
   });
-
+  
   return (
     <main>
       <h2 className="text-4xl font-bold text-slate-800">Exercises Page</h2>
