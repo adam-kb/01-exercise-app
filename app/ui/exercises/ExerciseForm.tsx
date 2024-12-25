@@ -1,70 +1,59 @@
 "use client";
 
-import { Difficulty } from "@prisma/client";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-
-import { FetchedExercise } from "@/app/lib/definitions";
-
-import { createExercise, updateExercise } from "@/app/queries/useExercises";
-
-import {
-  DetailOptions,
-  DifficultySelect,
-  EditInput,
-} from "@/app/ui/FormInputs";
+import { Difficulty, MediaType } from "@prisma/client";
+import { ExerciseFormProps } from "@/app/lib/definitions";
+import { handleFileUpload, validateForm } from "@/app/lib/utils";
+import { useExerciseMutation } from "@/app/queries/useExerciseMutation";
+import { Button, DetailOptions, DifficultySelect, EditInput, } from "@/app/ui/FormInputs";
+import ImagePicker from "../ImagePicker";
 import ToggleStatus from "../ToggleStatus";
-import { getQueryClient } from "@/app/getQueryClient";
-
-type ExerciseFormProps = {
-  mode: "create" | "update";
-  exercise?: FetchedExercise;
-};
 
 const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
-  const queryClient = getQueryClient();
-  const router = useRouter();
+  const mutation = useExerciseMutation(mode, exercise);
 
-  const mutationFn = mode === "update" ? updateExercise : createExercise;
-
-  const mutation = useMutation({
-    mutationFn,
-    onSuccess: (response) => {
-      const slug = "slug" in response ? response.slug : exercise?.slug;
-
-      // queryClient.invalidateQueries({ queryKey: ['exercises'] });
-      queryClient.invalidateQueries({ queryKey: ["exercises", slug] });
-
-      router.push(`/exercises/${slug}`);
-    },
-    onError: (error: unknown) => {
-      console.error("Error in mutation:", error);
-    },
-  });
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
 
-    const data = {
-      id: formData.get("id") as string,
-      name: formData.get("name") as string,
-      description: formData.get("description") as string,
-      difficulty: formData.get("difficulty") as Difficulty,
-      instruction: formData.get("instruction") as string,
-      muscleGroup: (formData.getAll("muscleGroup") as string[]).map((id) => ({
-        id,
-      })),
-      targetMuscle: (formData.getAll("targetMuscle") as string[]).map((id) => ({
-        id,
-      })),
-      equipment: (formData.getAll("equipment") as string[]).map((id) => ({
-        id,
-      })),
-    };
+    const file = formData.get("thumbnail") as File | null;
+    let mediaKey: string | null = null;
 
-    mutation.mutate(data);
+    try {
+      const data = {
+        id: formData.get("id") as string,
+        name: formData.get("name") as string,
+        description: formData.get("description") as string,
+        difficulty: formData.get("difficulty") as Difficulty,
+        instruction: formData.get("instruction") as string,
+        muscleGroup: (formData.getAll("muscleGroup") as string[]).map((id) => ({
+          id,
+        })),
+        targetMuscle: (formData.getAll("targetMuscle") as string[]).map((id) => ({
+          id,
+        })),
+        equipment: (formData.getAll("equipment") as string[]).map((id) => ({
+          id,
+        })),
+      };
+
+      validateForm(data);
+
+      if (file) {
+        mediaKey = await handleFileUpload(file);
+      }
+
+      const mutationData = {
+        ...data,
+        media: mediaKey ? [{ mediaKey, type: MediaType.THUMBNAIL }] : undefined,
+      }
+
+      console.log(mutationData);
+      return;
+      mutation.mutate(mutationData);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   let buttonText;
@@ -106,6 +95,7 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
           defaultValue={exercise?.instruction || ""}
           type="textarea"
         />
+        <ImagePicker id="thumbnail" />
         {/* Exercise Difficulty */}
         <DifficultySelect
           label="Difficulty"
@@ -137,12 +127,13 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
             <ToggleStatus id={exercise.id} currentStatus={exercise.status} />
           )}
         </div>
-        <button
+        <Button
           type="submit"
+          disabled={mutation.isPending}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 text-sm px-2 rounded"
         >
           {buttonText}
-        </button>
+        </Button>
       </div>
     </form>
   );

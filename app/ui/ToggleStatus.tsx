@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { getQueryClient } from "../getQueryClient";
+import { Button } from "./FormInputs";
 
 type ToggleStatusProps = {
   id: number;
@@ -50,13 +51,13 @@ const ToggleStatus = ({ id, currentStatus }: ToggleStatusProps) => {
       )}
 
       <div className="flex-col">
-        <button
+        <Button
           type="button"
           onClick={() => setIsDeactivating(true)}
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 text-sm rounded"
         >
           {currentStatus === "ACTIVE" ? "Deactivate" : "Activate"}
-        </button>
+        </Button>
       </div>
     </>
   );

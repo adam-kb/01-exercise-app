@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { Difficulty, Equipment } from "@prisma/client";
-import { fetchExerciseDetailOptions } from "@/app/queries/useEquipment";
+import React from "react";
 import { isOptionCurrent } from "@/app/lib/utils";
+import { fetchExerciseDetailOptions } from "@/app/queries/useEquipment";
+import { Difficulty, Equipment } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
 import { FetchedCheckboxes } from "./Skeletons";
 
 const difficulties = Object.values(Difficulty);
@@ -19,6 +20,25 @@ type EditInputProps = {
   defaultValue: string | undefined;
   type?: string;
 }
+
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  type?: "button" | "submit" | "reset" | undefined;
+  children: string;
+}
+
+export const Button = ({
+  type = "button",
+  children,
+  ...props
+}: ButtonProps ) => {
+  return (
+    <button type={type} {...props}>
+      {children}
+    </button>
+  );
+};
+
+
 
 export const DetailOptions = ({
   exerciseOption,

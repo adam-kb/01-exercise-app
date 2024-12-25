@@ -1,5 +1,17 @@
-import { Difficulty } from "@prisma/client";
+import { Difficulty, MediaType, Status } from "@prisma/client";
 import { z } from "zod";
+
+const MediaSchema = z.object({
+  mediaKey: z
+    .string()
+    .min(1,"Media key is required")
+    .max(40, "Filename is too long")
+    .regex(
+      /^(?:[a-zA-Z0-9_-]{11,}|[a-zA-Z0-9_-]+\.(?:jpg|jpeg|png))$/,
+      "Invalid media key format. Must be a valid YouTube ID or a file name (e.g., push-up.jpg)."
+    ),
+  type: z.nativeEnum(MediaType),
+});
 
 const FormSchema = z.object({
   id: z.coerce.number(),
@@ -7,6 +19,8 @@ const FormSchema = z.object({
   slug: z.string(),
   description: z.string().max(250, {message: "Please keep the description under 250 characters."}).optional(),
   difficulty: z.nativeEnum(Difficulty),
+  status: z.nativeEnum(Status).optional(),
+  media: MediaSchema.optional(),
   instruction: z.string().max(250, {message: "Please keep the description under 250 characters."}).optional(),
   muscleGroup: z.array(z.object({id: z.coerce.number()})).optional(),
   targetMuscle: z.array(z.object({id: z.coerce.number()})).optional(),

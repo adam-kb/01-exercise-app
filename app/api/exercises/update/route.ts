@@ -17,6 +17,13 @@ export const PUT = async (request: Request) => {
         description: data.description,
         instruction: data.instruction,
         difficulty: data.difficulty,
+        media: data.media ? {
+          deleteMany: {},
+          create: {
+            mediaKey: data.media.mediaKey,
+            type: data.media.type
+          }
+        } : undefined,
         targetMuscle: {
           set: data.targetMuscle?.map(({ id }) => ({ id })),
         },
@@ -33,7 +40,10 @@ export const PUT = async (request: Request) => {
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle specific Prisma errors
-      return NextResponse.json({ error: "Database error: " + error.message }, { status: 400 });
+      return NextResponse.json(
+        { error: "Database error: " + error.message },
+        { status: 400 }
+      );
     }
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unknown error" },
