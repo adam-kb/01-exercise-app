@@ -1,9 +1,10 @@
-import React from "react";
 import { isOptionCurrent } from "@/app/lib/utils";
 import { fetchExerciseDetailOptions } from "@/app/queries/useEquipment";
 import { Difficulty, Equipment } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { FetchedCheckboxes } from "./Skeletons";
+import React, { useState } from "react";
+import FeedbackMessage from "@/app/ui/FeedbackMessage";
+import { FetchedCheckboxes } from "@/app/ui/Skeletons";
 
 const difficulties = Object.values(Difficulty);
 
@@ -26,19 +27,74 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: string;
 }
 
+type FileInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  name: string,
+  label: string,
+  accept?: string,
+  maxSize?: number,
+  validTypes?: string[],
+  onFileChange: (file: File | null) => void
+}
+
+export const FileInput = ({
+  name,
+  label,
+  accept = '.jpg,.jpeg,.png',
+  maxSize = 4 * 1024 * 1024, // Default to 4MB
+  validTypes = ['image/jpeg', 'image/jpg', 'image/png'],
+  onFileChange,
+}: FileInputProps) => {
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    setError(null);
+
+    if (!file) {
+      onFileChange(null);
+      return;
+    }
+
+    if (!validTypes.includes(file?.type)) {
+      onFileChange(null);
+      setError("File must be of a type")
+      return;
+    }
+
+    if (file.size > maxSize) {
+      onFileChange(null);
+      setError("File size too large. 4MB max");
+      return;
+    }
+
+    onFileChange(file);
+  }
+
+  return (
+    <>
+      <label htmlFor={name}>{label}</label>
+      <input
+        type="file"
+        id={name}
+        name={name}
+        accept={accept}
+        onChange={handleChange} />
+      {error && <FeedbackMessage type="error" title="Error:" message={error} />}
+    </>
+  )
+}
+
 export const Button = ({
   type = "button",
   children,
   ...props
-}: ButtonProps ) => {
+}: ButtonProps) => {
   return (
     <button type={type} {...props}>
       {children}
     </button>
   );
 };
-
-
 
 export const DetailOptions = ({
   exerciseOption,

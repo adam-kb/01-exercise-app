@@ -10,14 +10,22 @@ interface ExerciseThumbnailProps {
 
 const ExerciseThumbnail = ({ media }: ExerciseThumbnailProps) => {
   // const youtubeRegex = /^[a-zA-Z0-9_-]{11}$/;
-  const {mediaKey, type} = media;
-  
+  const { mediaKey, type } = media;
+
   if (type === "VIDEO") {
     const youtubeThumbnailUrl = `https://img.youtube.com/vi/${mediaKey}/0.jpg`;
-    return <Image width={200} height={200} src={youtubeThumbnailUrl} alt="YouTube Thumbnail" />;
+    return <Image width={200} height={100} style={{ objectFit: "contain" }} src={youtubeThumbnailUrl} alt="YouTube Thumbnail" />;
   } else if (type === "THUMBNAIL") {
     const thumbnailUrl = process.env.NEXT_PUBLIC_MEDIA_SERVER_THUMBNAILS + mediaKey;
-    return <Image width={200} height={200} src={thumbnailUrl} alt="Exercise Thumbnail" />;
+    return (
+      <Image
+        width={200}
+        height={200}
+        style={{ objectFit: "contain" }}
+        src={thumbnailUrl}
+        alt="Exercise Thumbnail"
+        />
+      );
   }
 };
 

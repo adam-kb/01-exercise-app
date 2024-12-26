@@ -45,14 +45,15 @@ const Navigation = () => {
           </div>
 
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex shrink-0 items-center">
+            <div className="flex shrink-0 items-center w-10 h-10">
               <Link href={'/'}>
                 <Image
                   src="/barbell.svg"
                   alt="Next.js logo"
                   width={32}
                   height={32}
-                  priority
+                  priority={true}
+                  className="w-10 h-10"
                 />
               </Link>
             </div>

@@ -5,8 +5,8 @@ import { ExerciseFormProps } from "@/app/lib/definitions";
 import { handleFileUpload, validateForm } from "@/app/lib/utils";
 import { useExerciseMutation } from "@/app/queries/useExerciseMutation";
 import { Button, DetailOptions, DifficultySelect, EditInput, } from "@/app/ui/FormInputs";
-import ImagePicker from "../ImagePicker";
-import ToggleStatus from "../ToggleStatus";
+import ImagePicker from "@/app/ui/ImagePicker";
+import ToggleStatus from "@/app/ui/ToggleStatus";
 
 const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
   const mutation = useExerciseMutation(mode, exercise);
@@ -17,6 +17,11 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
     const formData = new FormData(event.currentTarget);
 
     const file = formData.get("thumbnail") as File | null;
+
+    if(file && file.size === 0) {
+      formData.delete("thumbnail");
+    }
+
     let mediaKey: string | null = null;
 
     try {
@@ -39,7 +44,7 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
 
       validateForm(data);
 
-      if (file) {
+      if (file && file.size > 0 && file.name) {
         mediaKey = await handleFileUpload(file);
       }
 
@@ -47,9 +52,7 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
         ...data,
         media: mediaKey ? [{ mediaKey, type: MediaType.THUMBNAIL }] : undefined,
       }
-
-      console.log(mutationData);
-      return;
+      
       mutation.mutate(mutationData);
     } catch (error) {
       console.error("Error:", error);
@@ -95,7 +98,7 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
           defaultValue={exercise?.instruction || ""}
           type="textarea"
         />
-        <ImagePicker id="thumbnail" />
+        <ImagePicker id="thumbnail" defaultImage={exercise?.media[0]?.mediaKey ?? ""} />
         {/* Exercise Difficulty */}
         <DifficultySelect
           label="Difficulty"

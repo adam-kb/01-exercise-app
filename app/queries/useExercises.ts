@@ -107,7 +107,7 @@ export const createExercise = async (
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || "Unable to update exercise.");
+    throw new Error(error.message || "Unable to create exercise.");
   }
 
   return response.json();

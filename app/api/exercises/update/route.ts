@@ -17,13 +17,15 @@ export const PUT = async (request: Request) => {
         description: data.description,
         instruction: data.instruction,
         difficulty: data.difficulty,
-        media: data.media ? {
-          deleteMany: {},
-          create: {
-            mediaKey: data.media.mediaKey,
-            type: data.media.type
-          }
-        } : undefined,
+        media: data.media
+          ? {
+              deleteMany: {},
+              create: data.media.map((item) => ({
+                mediaKey: item.mediaKey,
+                type: item.type,
+              })),
+            }
+          : undefined,
         targetMuscle: {
           set: data.targetMuscle?.map(({ id }) => ({ id })),
         },
