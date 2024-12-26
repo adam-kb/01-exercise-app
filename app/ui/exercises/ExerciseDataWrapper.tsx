@@ -14,13 +14,13 @@ const ExerciseDataWrapper = ({
   slug: string;
   edit: boolean;
 }) => {
-  const { data: exercise, isPending, error } = useExercise(slug);
-
-  if (isPending) {
+  const { data: exercise, isLoading, isError, error } = useExercise(slug);
+  
+  if (isLoading) {
     return <Loading />;
   }
 
-  if (error) {
+  if (isError) {
     return <span> Error: {error.message}</span>;
   }
 

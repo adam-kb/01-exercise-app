@@ -1,10 +1,15 @@
 "use client";
 
 import { Difficulty, MediaType } from "@prisma/client";
-import { ExerciseFormProps } from "@/app/lib/definitions";
+import { CreateExercise, ExerciseFormProps, UpdateExercise } from "@/app/lib/definitions";
 import { handleFileUpload, validateForm } from "@/app/lib/utils";
 import { useExerciseMutation } from "@/app/queries/useExerciseMutation";
-import { Button, DetailOptions, DifficultySelect, EditInput, } from "@/app/ui/FormInputs";
+import {
+  Button,
+  DetailOptions,
+  DifficultySelect,
+  EditInput,
+} from "@/app/ui/FormInputs";
 import ImagePicker from "@/app/ui/ImagePicker";
 import ToggleStatus from "@/app/ui/ToggleStatus";
 
@@ -18,7 +23,7 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
 
     const file = formData.get("thumbnail") as File | null;
 
-    if(file && file.size === 0) {
+    if (file && file.size === 0) {
       formData.delete("thumbnail");
     }
 
@@ -34,9 +39,11 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
         muscleGroup: (formData.getAll("muscleGroup") as string[]).map((id) => ({
           id,
         })),
-        targetMuscle: (formData.getAll("targetMuscle") as string[]).map((id) => ({
-          id,
-        })),
+        targetMuscle: (formData.getAll("targetMuscle") as string[]).map(
+          (id) => ({
+            id,
+          })
+        ),
         equipment: (formData.getAll("equipment") as string[]).map((id) => ({
           id,
         })),
@@ -44,15 +51,16 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
 
       validateForm(data);
 
+      let mutationData: UpdateExercise = { ...data };
+
       if (file && file.size > 0 && file.name) {
-        mediaKey = await handleFileUpload(file);
+        const mediaKey = await handleFileUpload(file);
+        mutationData = {
+          ...data,
+          media: [{ mediaKey, type: MediaType.THUMBNAIL }],
+        };
       }
 
-      const mutationData = {
-        ...data,
-        media: mediaKey ? [{ mediaKey, type: MediaType.THUMBNAIL }] : [],
-      }
-      
       mutation.mutate(mutationData);
     } catch (error) {
       console.error("Error:", error);
@@ -98,7 +106,10 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
           defaultValue={exercise?.instruction || ""}
           type="textarea"
         />
-        <ImagePicker id="thumbnail" defaultImage={exercise?.media[0]?.mediaKey ?? ""} />
+        <ImagePicker
+          id="thumbnail"
+          defaultImage={exercise?.media[0]?.mediaKey ?? ""}
+        />
         {/* Exercise Difficulty */}
         <DifficultySelect
           label="Difficulty"
@@ -133,7 +144,7 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
         <Button
           type="submit"
           disabled={mutation.isPending}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 text-sm px-2 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 text-sm px-2 rounded disabled:opacity-75 disabled:hover:opacity-75 disabled:cursor-not-allowed"
         >
           {buttonText}
         </Button>

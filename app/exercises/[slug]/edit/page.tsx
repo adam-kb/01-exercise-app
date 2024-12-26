@@ -1,12 +1,29 @@
+import { getQueryClient } from "@/app/getQueryClient";
 import { isValidExercise } from "@/app/lib/utils";
-import { fetchExercise } from "@/app/queries/useExercises";
-import { notFound } from "next/navigation";
+import { getExerciseData } from "@/app/queries/useExercises";
 import ExerciseDataWrapper from "@/app/ui/exercises/ExerciseDataWrapper";
 import {
   dehydrate,
   HydrationBoundary,
 } from "@tanstack/react-query";
-import { getQueryClient } from "@/app/getQueryClient";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+
+export const generateMetadata = async ({
+  params
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> => {
+
+  const exerciseSlug = (await params).slug
+
+  const exercise = await getExerciseData(exerciseSlug);
+
+  return {
+    title: `Edit ${exercise.name}`,
+    description: exercise.description
+  }
+}
 
 const EditPage = async ({
   params,
@@ -27,11 +44,9 @@ const EditPage = async ({
   }
 
   const queryClient = getQueryClient();
+  const exercise = await getExerciseData(exerciseSlug);
 
-  await queryClient.prefetchQuery({
-    queryKey: ["exercises", exerciseSlug],
-    queryFn: () => fetchExercise(exerciseSlug),
-  });
+  queryClient.setQueryData(["exercises", exerciseSlug], exercise);
 
   return (
     <main>

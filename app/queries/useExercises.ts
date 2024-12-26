@@ -6,6 +6,7 @@ import {
 } from "@/app/lib/definitions";
 import { Status } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
+import { getQueryClient } from "@/app/getQueryClient";
 
 type InfinitePaginatedResponse = {
   data: FetchedExercise[];
@@ -44,7 +45,9 @@ export const useExercises = () => {
 export const fetchExercise = async (
   exerciseSlug: string
 ): Promise<FetchedExercise> => {
-  const response = await fetch(`/api/exercises/${exerciseSlug}`);
+  const baseUrl =
+    typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+  const response = await fetch(`${baseUrl}/api/exercises/${exerciseSlug}`);
 
   if (!response.ok) {
     throw new Error("Error fetching exercise.");
@@ -74,6 +77,15 @@ export const fetchFeaturedExercises = async (): Promise<
 
   return response.json();
 };
+
+export const getExerciseData = async (slug: string): Promise<FetchedExercise> => {
+  const queryClient = getQueryClient();
+
+  return await queryClient.fetchQuery({
+    queryKey: ["exercises", slug],
+    queryFn: () => fetchExercise(slug),
+  });
+}
 
 export const useFeaturedExercises = () => {
   return useQuery<FeatureExerciseOutputData[]>({

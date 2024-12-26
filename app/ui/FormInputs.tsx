@@ -48,6 +48,7 @@ export const FileInput = ({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
+    
     setError(null);
 
     if (!file) {

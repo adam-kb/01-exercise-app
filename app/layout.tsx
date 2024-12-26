@@ -17,7 +17,10 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Exercise App",
+  title: {
+    template: '%s | Exercise App',
+    default: 'Exercise App'
+  },
   description: "Homepage of the Exercise App",
 };
 

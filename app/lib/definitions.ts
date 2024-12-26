@@ -2,6 +2,7 @@ import {
   Prisma,
   Difficulty as ExerciseDifficulty,
   Status as ExerciseStatus,
+  MediaType,
 } from "@prisma/client";
 
 // Reusable Select Objects for Queries
@@ -38,14 +39,15 @@ export type MinimalExercise = Prisma.ExerciseGetPayload<{
 // CRUD Operation Types
 export type CreateExercise = Omit<
   UnifiedExercise,
-  "id" | "slug" | "status" | "targetMuscle" | "muscleGroup" | "equipment"
+  "id" | "slug" | "status" | "targetMuscle" | "muscleGroup" | "equipment" | "media"
 > & {
+  media?: [{mediaKey: string, type: MediaType}];
   targetMuscle: { id: string }[]; // Use `id` for creating/updating
   muscleGroup: { id: string }[];
   equipment: { id: string }[];
 };
 
-export type UpdateExercise = Omit<CreateExercise, "slug"> & { id: string };
+export type UpdateExercise = Omit<CreateExercise, "slug"> & { id: string, media?: [{mediaKey: string, type: MediaType}]; };
 
 // Form Input Types
 export type ExerciseFormInputs = Partial<CreateExercise>;
