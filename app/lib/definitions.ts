@@ -38,7 +38,7 @@ export type MinimalExercise = Prisma.ExerciseGetPayload<{
 // CRUD Operation Types
 export type CreateExercise = Omit<
   UnifiedExercise,
-  "id" | "slug" | "status" | "targetMuscle" | "muscleGroup" | "equipment" | "media"
+  "id" | "slug" | "status" | "targetMuscle" | "muscleGroup" | "equipment"
 > & {
   targetMuscle: { id: string }[]; // Use `id` for creating/updating
   muscleGroup: { id: string }[];
@@ -67,6 +67,7 @@ export type FeatureExerciseOutputData = Prisma.FeatureExerciseGetPayload<{
         description: true;
         instruction: true;
         difficulty: true;
+        media: { select: {mediaKey: true, type: true} };
         muscleGroup: { select: { name: true } };
         targetMuscle: { select: { name: true } };
         equipment: { select: { name: true } };

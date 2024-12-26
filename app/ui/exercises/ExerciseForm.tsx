@@ -50,7 +50,7 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
 
       const mutationData = {
         ...data,
-        media: mediaKey ? [{ mediaKey, type: MediaType.THUMBNAIL }] : undefined,
+        media: mediaKey ? [{ mediaKey, type: MediaType.THUMBNAIL }] : [],
       }
       
       mutation.mutate(mutationData);
