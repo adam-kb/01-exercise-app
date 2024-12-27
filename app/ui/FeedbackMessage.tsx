@@ -3,7 +3,7 @@ import clsx from "clsx";
 type FeedbackMessageProps = {
   type: "success" | "warning" | "error" | "info";
   title: string
-  message?: string
+  message?: string | string[] | null
 }
 
 const FeedbackMessage = ({ type, title, message }: FeedbackMessageProps) => {

@@ -3,12 +3,28 @@ import prisma from "@/app/lib/prisma";
 import { UpdateExercise } from "@/app/lib/definitions";
 import { UpdateExerciseSchema } from "@/app/lib/actions";
 import { Prisma } from "@prisma/client";
+import { z, ZodIssue } from "zod";
 
 export const PUT = async (request: Request) => {
   try {
     const exercisePayload = (await request.json()) as UpdateExercise;
 
-    const data = UpdateExerciseSchema.parse(exercisePayload);
+    const result = UpdateExerciseSchema.safeParse(exercisePayload);
+
+    if (!result.success) {
+      const errorMessages = result.error.errors.map((issue: ZodIssue) => ({
+        message: issue.message,
+        errorCode: issue.code,
+        path: issue.path,
+      }));
+
+      return NextResponse.json(
+        { error: "Bad request", details: errorMessages },
+        { status: 400 }
+      );
+    }
+
+    const data = result.data;
 
     const updatedExercise = await prisma.exercise.update({
       where: { id: data.id },

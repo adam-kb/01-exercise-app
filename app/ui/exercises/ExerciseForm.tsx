@@ -1,7 +1,7 @@
 "use client";
 
 import { Difficulty, MediaType } from "@prisma/client";
-import { CreateExercise, ExerciseFormProps, UpdateExercise } from "@/app/lib/definitions";
+import { ApiErrorProps, ExerciseFormProps, UpdateExercise } from "@/app/lib/definitions";
 import { handleFileUpload, validateForm } from "@/app/lib/utils";
 import { useExerciseMutation } from "@/app/queries/useExerciseMutation";
 import {
@@ -12,9 +12,17 @@ import {
 } from "@/app/ui/FormInputs";
 import ImagePicker from "@/app/ui/ImagePicker";
 import ToggleStatus from "@/app/ui/ToggleStatus";
+import { useState } from "react";
+import FeedbackMessage from "../FeedbackMessage";
 
 const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
-  const mutation = useExerciseMutation(mode, exercise);
+  const [error, setError] = useState<ApiErrorProps | null>(null);
+  
+  const handleError = (error: ApiErrorProps) => {
+    setError(error);
+  }
+  
+  const mutation = useExerciseMutation({mode, exercise, onError: handleError});
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -26,8 +34,6 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
     if (file && file.size === 0) {
       formData.delete("thumbnail");
     }
-
-    let mediaKey: string | null = null;
 
     try {
       const data = {
@@ -141,6 +147,11 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
             <ToggleStatus id={exercise.id} currentStatus={exercise.status} />
           )}
         </div>
+          {error &&
+          error.details.map(detail => (
+            <FeedbackMessage key={detail.path[0]} type="error" title={error.message} message={detail.message} />
+          ))
+          }
         <Button
           type="submit"
           disabled={mutation.isPending}

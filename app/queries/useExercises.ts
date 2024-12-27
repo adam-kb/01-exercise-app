@@ -3,6 +3,7 @@ import {
   UpdateExercise,
   CreateExercise,
   FeatureExerciseOutputData,
+  ApiErrorProps,
 } from "@/app/lib/definitions";
 import { Status } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
@@ -78,14 +79,16 @@ export const fetchFeaturedExercises = async (): Promise<
   return response.json();
 };
 
-export const getExerciseData = async (slug: string): Promise<FetchedExercise> => {
+export const getExerciseData = async (
+  slug: string
+): Promise<FetchedExercise> => {
   const queryClient = getQueryClient();
 
   return await queryClient.fetchQuery({
     queryKey: ["exercises", slug],
     queryFn: () => fetchExercise(slug),
   });
-}
+};
 
 export const useFeaturedExercises = () => {
   return useQuery<FeatureExerciseOutputData[]>({
@@ -105,7 +108,12 @@ export const updateExercise = async (
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || "Unable to update exercise.");
+
+    throw {
+      name: "ApiError",
+      message: error.message || "Unable to update exercise.",
+      details: error.details || null,
+    } as ApiErrorProps;
   }
 
   return response.json();

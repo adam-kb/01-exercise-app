@@ -21,7 +21,7 @@ const FormSchema = z.object({
   difficulty: z.nativeEnum(Difficulty),
   status: z.nativeEnum(Status).optional(),
   media: z.array(MediaSchema).optional(),
-  instruction: z.string().max(250, {message: "Please keep the description under 250 characters."}).optional(),
+  instruction: z.string().max(250, {message: "Please keep the instruction under 250 characters."}).optional(),
   muscleGroup: z.array(z.object({id: z.coerce.number()})).optional(),
   targetMuscle: z.array(z.object({id: z.coerce.number()})).optional(),
   equipment: z.array(z.object({id: z.coerce.number()})).optional(),

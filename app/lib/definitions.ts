@@ -47,7 +47,10 @@ export type CreateExercise = Omit<
   equipment: { id: string }[];
 };
 
-export type UpdateExercise = Omit<CreateExercise, "slug"> & { id: string, media?: [{mediaKey: string, type: MediaType}]; };
+export type UpdateExercise = Omit<CreateExercise, "slug"> & {
+  id: string,
+  media?: [{mediaKey: string, type: MediaType}];
+};
 
 // Form Input Types
 export type ExerciseFormInputs = Partial<CreateExercise>;
@@ -126,3 +129,16 @@ export type ExerciseFormProps = {
   mode: "create" | "update";
   exercise?: FetchedExercise;
 };
+
+
+type ApiErrorDetails = {
+  message: string;
+  errorCode: string;
+  path: (string | number)[]
+}
+
+export type ApiErrorProps = {
+  name: string;
+  message: string;
+  details: ApiErrorDetails[],
+}
