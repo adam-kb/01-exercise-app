@@ -20,7 +20,7 @@ const Exercises = () => {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ["exercises"],
+    queryKey: ["infiniteExercises"],
     queryFn: fetchExercises,
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextCursor,

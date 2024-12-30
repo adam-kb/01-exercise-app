@@ -130,6 +130,17 @@ export type ExerciseFormProps = {
   exercise?: FetchedExercise;
 };
 
+export class ApiError extends Error {
+  details: any;
+
+  constructor (message: string, details: any) {
+    super(message);
+    this.name = "ApiError";
+    this.details = details;
+  }
+
+}
+
 
 type ApiErrorDetails = {
   message: string;

@@ -25,6 +25,7 @@ export const useExerciseMutation = ({ mode, exercise, onError }: ExerciseMutatio
     },
     onError: (error: unknown) => {
       console.error("Error in mutation:", error);
+      
       if (onError && typeof error === "object" && error !== null) {
         onError(error as ApiErrorProps);
       }

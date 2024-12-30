@@ -10,7 +10,7 @@ const ExercisesPage = async () => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchInfiniteQuery({
-    queryKey: ["exercises"],
+    queryKey: ["infiniteExercises"],
     queryFn: ({ pageParam = 0 }) => fetchExercises({ pageParam }),
     initialPageParam: 0
   });

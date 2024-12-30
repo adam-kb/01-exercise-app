@@ -5,6 +5,9 @@ import { NextResponse } from "next/server";
 import { Readable } from "stream";
 import { NextApiRequest } from "next";
 
+const ALLOWED_EXTENSIONS = [".jpg", ".jpeg", ".png"];
+const FILE_SIZE = 4 * 1024 * 1024; // 4MB limit
+
 // Configure Multer storage
 const uploadDir = path.join(process.cwd(), "media/thumbnails");
 const storage = multer.diskStorage({
@@ -21,11 +24,10 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
   limits: {
-    fileSize: 4 * 1024 * 1024, // 4MB limit
+    fileSize: FILE_SIZE
   },
   fileFilter: (req, file, cb) => {
-    const allowedExtensions = [".jpg", ".jpeg", ".png"];
-    if (!allowedExtensions.includes(path.extname(file.originalname))) {
+    if (!ALLOWED_EXTENSIONS.includes(path.extname(file.originalname))) {
       return cb(new Error("Invalid file type"));
     }
     cb(null, true);

@@ -4,6 +4,7 @@ import {
   CreateExercise,
   FeatureExerciseOutputData,
   ApiErrorProps,
+  ApiError,
 } from "@/app/lib/definitions";
 import { Status } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
@@ -109,11 +110,10 @@ export const updateExercise = async (
   if (!response.ok) {
     const error = await response.json();
 
-    throw {
-      name: "ApiError",
-      message: error.message || "Unable to update exercise.",
-      details: error.details || null,
-    } as ApiErrorProps;
+    throw new ApiError(
+      error.message || "unable to update exercise",
+      error.details || null
+    )
   }
 
   return response.json();
