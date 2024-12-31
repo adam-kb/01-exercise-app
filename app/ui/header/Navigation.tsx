@@ -18,6 +18,7 @@ const Navigation = () => {
       (
         <>
           <NavLink href="/exercises" mode={mode}>Exercises</NavLink>
+          <NavLink href="/exercises/featured" mode={mode}>Featured Exercises</NavLink>
           <NavLink href="/exercises/create" mode={mode}>Create Exercise</NavLink>
         </>
       )

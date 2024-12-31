@@ -112,34 +112,15 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
           defaultValue={exercise?.instruction || ""}
           type="textarea"
         />
-        <ImagePicker
-          id="thumbnail"
-          defaultImage={exercise?.media[0]?.mediaKey ?? ""}
-        />
+        <ImagePicker id="thumbnail" defaultImage={exercise?.media[0]?.mediaKey ?? ""} />
         {/* Exercise Difficulty */}
-        <DifficultySelect
-          label="Difficulty"
-          name="difficulty"
-          defaultValue={exercise?.difficulty}
-        />
+        <DifficultySelect label="Difficulty" name="difficulty" defaultValue={exercise?.difficulty} />
         {/* Equipment */}
-        <DetailOptions
-          exerciseOption="equipment"
-          currentValues={exercise?.equipment}
-          outputName="Equipment"
-        />
+        <DetailOptions exerciseOption="equipment" currentValues={exercise?.equipment} outputName="Equipment" />
         {/* TargetedMuscle */}
-        <DetailOptions
-          exerciseOption="targetMuscle"
-          currentValues={exercise?.targetMuscle}
-          outputName="Target Muscles"
-        />
+        <DetailOptions exerciseOption="targetMuscle" currentValues={exercise?.targetMuscle} outputName="Target Muscles" />
         {/* MuscleGroup */}
-        <DetailOptions
-          exerciseOption="muscleGroup"
-          currentValues={exercise?.muscleGroup}
-          outputName="Muscle Groups"
-        />
+        <DetailOptions exerciseOption="muscleGroup" currentValues={exercise?.muscleGroup} outputName="Muscle Groups" />
       </div>
       <div className="flex gap-4 justify-end">
         <div>

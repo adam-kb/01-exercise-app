@@ -141,6 +141,7 @@ export class ApiError extends Error {
 
 }
 
+export type EquipmentDetailGroups = "equipment" | "muscleGroup" | "targetMuscle";
 
 type ApiErrorDetails = {
   message: string;

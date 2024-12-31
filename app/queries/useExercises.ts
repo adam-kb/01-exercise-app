@@ -3,7 +3,6 @@ import {
   UpdateExercise,
   CreateExercise,
   FeatureExerciseOutputData,
-  ApiErrorProps,
   ApiError,
 } from "@/app/lib/definitions";
 import { Status } from "@prisma/client";

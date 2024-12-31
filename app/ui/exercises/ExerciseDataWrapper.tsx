@@ -6,6 +6,7 @@ import Loading from "../Loading";
 import ExerciseEditForm from "./ExerciseEditForm";
 import Link from "next/link";
 import Card from "../Card";
+import usePrefetchExerciseDetails from "@/app/queries/usePrefetchExerciseDetails";
 
 const ExerciseDataWrapper = ({
   slug,
@@ -15,6 +16,8 @@ const ExerciseDataWrapper = ({
   edit: boolean;
 }) => {
   const { data: exercise, isLoading, isError, error } = useExercise(slug);
+  
+  const handleInteraction = usePrefetchExerciseDetails();
   
   if (isLoading) {
     return <Loading />;
@@ -35,7 +38,7 @@ const ExerciseDataWrapper = ({
   return (
     <>
       <Card>
-        <Link href={`/exercises/${slug}/edit`}>Edit Exercise</Link>
+        <Link href={`/exercises/${slug}/edit`} onMouseEnter={handleInteraction} onFocus={handleInteraction}>Edit Exercise</Link>
         <Exercise exercise={exercise} />
       </Card>
     </>

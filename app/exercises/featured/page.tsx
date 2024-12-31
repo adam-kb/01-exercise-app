@@ -1,18 +1,12 @@
 import { fetchFeaturedExercises } from "@/app/queries/useExercises";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-import Exercises from "@/app/ui/exercises/Exercises";
-
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "@/app/getQueryClient";
 import { FeatureExerciseOutputData } from "@/app/lib/definitions";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Featured | Exercise App",
-  description: "Homepage of the Exercise App",
+  title: "Featured",
+  description: "Find featured Exercises",
 };
 
 const FeaturedExercisePage = async () => {
@@ -21,15 +15,19 @@ const FeaturedExercisePage = async () => {
   const exercises: FeatureExerciseOutputData[] = await queryClient.fetchQuery({
     queryKey: ["exercises", "featured"],
     queryFn: fetchFeaturedExercises,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 30, // 30 minutes
   });
 
   return (
     <main>
-      {exercises.map(featured => (
-        <div key={featured.exercise.id}>
-          <p>{featured.exercise.name}</p>
-        </div>
-      ))}
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        {exercises.map(featured => (
+          <div key={featured.exercise.id}>
+            <p>{featured.exercise.name}</p>
+          </div>
+        ))}
+      </HydrationBoundary>
     </main>
   )
 }

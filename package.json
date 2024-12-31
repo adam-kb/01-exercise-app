@@ -30,6 +30,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.9",
+    "@tanstack/react-query-devtools": "^5.62.11",
     "@types/multer": "^1.4.12",
     "@types/node": "^20.17.6",
     "@types/react": "^18",

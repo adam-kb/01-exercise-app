@@ -5,11 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import FeedbackMessage from "@/app/ui/FeedbackMessage";
 import { FetchedCheckboxes } from "@/app/ui/Skeletons";
+import { EquipmentDetailGroups } from "../lib/definitions";
 
 const difficulties = Object.values(Difficulty);
 
 type DetailProps = {
-  exerciseOption: string;
+  exerciseOption: EquipmentDetailGroups;
   currentValues: { id: number; name: string }[] | undefined;
   outputName: string;
 }
@@ -105,6 +106,7 @@ export const DetailOptions = ({
   const { data, isError, isPending } = useQuery({
     queryKey: [exerciseOption],
     queryFn: () => fetchExerciseDetailOptions<Equipment>(exerciseOption),
+    staleTime: 1000 * 60 * 60
   });
 
   return (

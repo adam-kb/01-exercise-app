@@ -2,10 +2,7 @@ import { getQueryClient } from "@/app/getQueryClient";
 import { isValidExercise } from "@/app/lib/utils";
 import { getExerciseData } from "@/app/queries/useExercises";
 import ExerciseDataWrapper from "@/app/ui/exercises/ExerciseDataWrapper";
-import {
-  dehydrate,
-  HydrationBoundary,
-} from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -30,7 +27,7 @@ const ExercisePage = async ({
 }: {
   params: Promise<{ slug: string }>;
 }) => {
-  
+
   const exerciseSlug = (await params).slug;
 
   const { exerciseStatus } = await isValidExercise({ slug: exerciseSlug });

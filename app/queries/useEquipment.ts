@@ -1,4 +1,4 @@
-import { Equipment } from "../lib/definitions";
+import { Equipment, EquipmentDetailGroups } from "../lib/definitions";
 
 export const fetchEquipment = async (): Promise<Equipment[] | null> => {
   const response = await fetch("/api/equipment");
@@ -11,7 +11,7 @@ export const fetchEquipment = async (): Promise<Equipment[] | null> => {
 }
 
 
-export const fetchExerciseDetailOptions = async <T>(endpoint: string): Promise<T[]> => {
+export const fetchExerciseDetailOptions = async <T>(endpoint: EquipmentDetailGroups): Promise<T[]> => {
   const response = await fetch(`/api/${endpoint}`);
 
   if(!response.ok) {
