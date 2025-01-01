@@ -8,6 +8,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id                Int         @id @default(autoincrement())
+  email             String      @unique
+  hashedPassword          String // How private? I dunno how this stuff works
+  firstName         String?
+  lastName          String?
+  birthDate         DateTime? // Not sure what type of field
+  userName          String?     @unique// Public facing name? for privacy etc
+  userStatus        UserStatus  
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  authoredWorkout      Workout[] @relation("AuthorWorkouts") // workouts they have created
+}
+
 model Exercise {
   id              Int                   @id @default(autoincrement())
   name            String                @unique
@@ -21,8 +36,82 @@ model Exercise {
   equipment       Equipment[]           @relation("ExerciseToEquipment")
   muscleGroup     MuscleGroup[]         @relation("ExerciseToGroup")
   targetMuscle    TargetMuscle[]        @relation("ExerciseToMuscle")
+  workouts        ExerciseWorkout[]
   createdAt       DateTime              @default(now())
   updatedAt       DateTime              @updatedAt
+
+  exerciseHistory ExerciseHistory[]
+}
+
+model Workout {
+  id            Int         @id @default(autoincrement())
+  name          String      @unique
+  description   String?
+  authorId      Int
+  author        User @relation("AuthorWorkouts", fields: [authorId], references: [id])
+  exercises     ExerciseWorkout[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  workoutHistory      WorkoutHistory[]
+}
+
+model ExerciseWorkout {
+  workoutId           Int
+  exerciseId          Int
+  order               Int?
+  note                String?
+  intensity           Int?
+  idealSets           IntendedSets[]
+  duration            Int?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  exercise  Exercise  @relation(fields: [exerciseId], references: [id])
+  workout   Workout   @relation(fields: [workoutId], references: [id])
+
+  @@id([workoutId, exerciseId])
+}
+
+model IntendedSets {
+  id          Int                       @id @default(autoincrement())
+  setNumber   Int
+  reps        Int?
+  weight      Float?
+  workoutId   Int
+  exerciseId  Int
+  exerciseWorkout     ExerciseWorkout   @relation(fields: [workoutId, exerciseId], references: [workoutId, exerciseId])
+  
+  @@index([workoutId, exerciseId])
+}
+
+model WorkoutHistory {
+  id          Int                   @id @default(autoincrement())
+  workout     Workout               @relation(fields: [workoutId], references: [id])
+  workoutId   Int
+  exerciseHistory ExerciseHistory[]
+  note        String?
+
+  startTime   DateTime
+  endTime     DateTime
+}
+
+model ExerciseHistory {
+  id                Int             @id @default(autoincrement())
+  exercise          Exercise        @relation(fields: [exerciseId], references: [id])
+  exerciseId        Int
+  workoutHistory    WorkoutHistory  @relation(fields: [workoutHistoryId], references: [id])
+  workoutHistoryId  Int
+  sets              SetHistory[]
+}
+
+model SetHistory {
+  id                  Int               @id @default(autoincrement())
+  exerciseHistory     ExerciseHistory   @relation(fields: [exerciseHistoryId], references: [id])
+  exerciseHistoryId   Int
+  setNumber           Int?
+  repsComplete        Int?
+  weight              Float?
 }
 
 model FeatureExercise {
@@ -54,12 +143,12 @@ model Equipment {
 }
 
 model Media {
-  id          Int       @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   mediaKey    String
   type        MediaType
-  exercise    Exercise @relation("ExerciseMedia", fields: [exerciseId], references: [id])
+  exercise    Exercise    @relation("ExerciseMedia", fields: [exerciseId], references: [id])
   exerciseId  Int
-  createdAt   DateTime @default(now())
+  createdAt   DateTime    @default(now())
 }
 
 enum Status {
@@ -77,4 +166,11 @@ enum Difficulty {
 enum MediaType {
   THUMBNAIL
   VIDEO
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  BANNED
+  ADMIN
 }
