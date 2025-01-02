@@ -36,6 +36,29 @@ export type MinimalExercise = Prisma.ExerciseGetPayload<{
   select: typeof minimalExerciseSelect;
 }>;
 
+
+export const WorkoutSelect = {
+    author: {
+      select: {
+        userName: true
+      }
+    },
+    exercises: {
+      include: {
+        exercise: true,
+        intendedSets: true
+      },
+    }
+} as const;
+
+export type Workout = Prisma.WorkoutGetPayload<{
+  include: typeof WorkoutSelect
+}>;
+
+export type WorkoutsResponse = {
+  workouts: Workout[]
+}
+
 // CRUD Operation Types
 export type CreateExercise = Omit<
   UnifiedExercise,

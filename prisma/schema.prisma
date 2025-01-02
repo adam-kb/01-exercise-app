@@ -62,7 +62,7 @@ model ExerciseWorkout {
   order               Int?
   note                String?
   intensity           Int?
-  idealSets           IntendedSets[]
+  intendedSets        IntendedSets[]
   duration            Int?
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt

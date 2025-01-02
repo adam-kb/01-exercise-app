@@ -8,14 +8,15 @@
     "seed:dev": "dotenv -e .env.development -- tsx prisma/seed.ts"
   },
   "scripts": {
-    "dev": "dotenv -e .env.development -- next dev",
+    "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "seed": "tsx prisma/seed.ts",
     "test": "jest",
     "push:dev": "dotenv -e .env.development -- prisma db push",
-    "seed:dev": "dotenv -e .env.development -- tsx prisma/seed.ts"
+    "seed:dev": "dotenv -e .env.development -- tsx prisma/seed.ts",
+    "queryTest": "dotenv -e .env.development -- npx tsx prisma/tests/testQueries.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.0.1",
