@@ -154,9 +154,9 @@ export type ExerciseFormProps = {
 };
 
 export class ApiError extends Error {
-  details: any;
+  details: unknown;
 
-  constructor (message: string, details: any) {
+  constructor (message: string, details: unknown) {
     super(message);
     this.name = "ApiError";
     this.details = details;

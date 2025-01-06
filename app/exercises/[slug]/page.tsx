@@ -6,6 +6,11 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+export async function isExerciseAvailable(slug: string): Promise<boolean> {
+  const { exerciseStatus } = await isValidExercise({ slug });
+  return exerciseStatus !== null;
+}
+
 export const generateMetadata = async ({
   params
 }: {
@@ -13,6 +18,10 @@ export const generateMetadata = async ({
 }): Promise<Metadata> => {
 
   const exerciseSlug = (await params).slug
+
+  if (!(await isExerciseAvailable(exerciseSlug))) {
+    return {}; // Skip metadata generation
+  }
 
   const exercise = await getExerciseData(exerciseSlug);
 

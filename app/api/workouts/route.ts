@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
-import { Workout, WorkoutSelect } from "@/app/lib/definitions";
+import { WorkoutSelect } from "@/app/lib/definitions";
 
 export const GET = async () => {
   try {

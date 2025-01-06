@@ -25,7 +25,7 @@ export const isValidExercise = async ({
   });
 
   if (!exercise) {
-    throw new Error("Exercise not found");
+    return { exerciseStatus: null}
   }
 
   return { exerciseStatus: exercise.status };
