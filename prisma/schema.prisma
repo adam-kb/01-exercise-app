@@ -46,6 +46,7 @@ model Exercise {
 model Workout {
   id            Int         @id @default(autoincrement())
   name          String      @unique
+  slug          String      @unique
   description   String?
   authorId      Int
   author        User @relation("AuthorWorkouts", fields: [authorId], references: [id])
