@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
-import prisma from "@/app/lib/prisma";
-import { UpdateExercise } from "@/app/lib/definitions";
 import { UpdateExerciseSchema } from "@/app/lib/actions";
+import { UpdateExercise } from "@/app/lib/definitions";
+import prisma from "@/app/lib/prisma";
 import { Prisma } from "@prisma/client";
-import { z, ZodIssue } from "zod";
+import { NextResponse } from "next/server";
+import { ZodIssue } from "zod";
 
 export const PUT = async (request: Request) => {
   try {

@@ -16,6 +16,20 @@ export const fetchWorkouts = async (): Promise<Workout[]> => {
   return response.json();
 }
 
+export const getWorkoutData = async (slug: string): Promise<Workout> => {
+  const baseUrl =
+    typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+  const response = await fetch(`${baseUrl}/api/workouts/${slug}`);
+
+  if(!response.ok) {
+    console.log(response);
+    throw new Error("Error fetching workout");
+  }
+
+  return response.json();
+}
+
 export const useWorkouts = () => {
   return useQuery({
     queryKey: ["workouts"],
