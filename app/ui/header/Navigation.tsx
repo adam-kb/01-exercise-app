@@ -13,7 +13,7 @@ const Navigation = () => {
     setIsOpen(!isOpen);
   }
 
-  const TopNav = ({mode}: {mode?: "desktop" | "mobile"}) => {
+  const TopNav = ({ mode }: { mode?: "desktop" | "mobile" }) => {
     return (
       (
         <>
@@ -27,7 +27,7 @@ const Navigation = () => {
   }
 
   return (
-    <nav className="bg-gray-800">
+    <nav className="">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 right-0 flex items-center sm:hidden">
@@ -50,8 +50,8 @@ const Navigation = () => {
             <div className="flex shrink-0 items-center w-10 h-10">
               <Link href={'/'}>
                 <Image
-                  src="/barbell.svg"
-                  alt="Next.js logo"
+                  src="/barbell-white.svg"
+                  alt="Logo"
                   width={32}
                   height={32}
                   priority={true}
