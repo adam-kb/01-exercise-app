@@ -23,6 +23,7 @@ body {
 input, textarea, select {
   @apply p-2;
 }
+a[target="_blank"]::after { content: ' ⧉'; }
 
 .shimmer {
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
