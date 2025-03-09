@@ -6,7 +6,10 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import Loading from "../Loading";
-import Exercise from "./Exercise";
+// import Exercise from "./Exercise";
+import ExerciseThumbnail from "./ExerciseThumbnail";
+// import Link from "next/link";
+import ExerciseLink from "./ExerciseLink";
 
 const Exercises = () => {
   const { ref, inView } = useInView();
@@ -36,13 +39,21 @@ const Exercises = () => {
     <p>Error: {error.message}</p>
   ) : (
     <>
-      <ul>
+      <ul className="grid gap-2 md:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {data.pages
           .flatMap((group) => group.data)
           .map((exercise) => (
-            <li key={exercise.id}>
-              <Card>
-                <Exercise exercise={exercise} />
+            <li key={exercise.id} >
+              <Card customClasses="h-full">
+                {exercise.media.length > 0 && exercise.media.map(item => (
+                  <ExerciseThumbnail key={item.mediaKey} media={item} />
+                ))}
+                <h2 className="text-lg">
+                  <ExerciseLink slug={exercise.slug}>
+                    {exercise.name}
+                  </ExerciseLink>
+                </h2>
+                {/* <Exercise exercise={exercise} /> */}
               </Card>
             </li>
           ))}
@@ -56,8 +67,8 @@ const Exercises = () => {
           {isFetchingNextPage
             ? "Loading more exercises..."
             : hasNextPage
-            ? "Load More Exercises"
-            : "All exercises loaded"}
+              ? "Load More Exercises"
+              : "All exercises loaded"}
         </button>
       </div>
       <div>{isFetching && !isFetchingNextPage ? "Fetching..." : null}</div>
