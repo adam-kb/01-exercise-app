@@ -41,3 +41,15 @@ next-env.d.ts
 
 #media
 /media
+
+# Docker
+*.log
+*.pid
+postgres-data/
+
+# Prisma lock
+prisma/migrations/migration_lock.toml
+
+# Only ignore runtime media uploads, not static assets
+!media/thumbnails/
+media/uploads/
