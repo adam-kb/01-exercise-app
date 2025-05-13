@@ -21,6 +21,7 @@ type EditInputProps = {
   placeholder: string;
   defaultValue: string | undefined;
   type?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -150,6 +151,7 @@ export const EditInput = ({
   placeholder,
   defaultValue,
   type = "text",
+  onChange
 }: EditInputProps) => {
   const inputClasses =
     "peer block w-full rounded-md border border-gray-200 py-2 text-sm outline-2 placeholder:text-gray-500";
@@ -182,6 +184,7 @@ export const EditInput = ({
         placeholder={placeholder}
         className={inputClasses}
         defaultValue={defaultValue || ""}
+        onChange={onChange}
       />
     </div>
   );

@@ -84,3 +84,26 @@ export const handleFileUpload = async (file: File): Promise<string> => {
   const { mediaKey } = await response.json();
   return mediaKey;
 };
+
+export function debounce<T extends (...args: string[]) => void>(
+  fn: T,
+  delay: number
+): {
+  callback: (...args: Parameters<T>) => void;
+  cancel: () => void;
+} {
+  let timeoutId: ReturnType<typeof setTimeout>;
+
+  const callback = (...args: Parameters<T>) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
+
+  const cancel = () => {
+    clearTimeout(timeoutId);
+  };
+
+  return { callback, cancel };
+}

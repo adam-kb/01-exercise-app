@@ -4,6 +4,8 @@ import {
   CreateExercise,
   FeatureExerciseOutputData,
   ApiError,
+  Workout,
+  WorkoutDraft,
 } from "@/app/lib/definitions";
 import { Status } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
@@ -112,7 +114,7 @@ export const updateExercise = async (
     throw new ApiError(
       error.message || "unable to update exercise",
       error.details || null
-    )
+    );
   }
 
   return response.json();
@@ -152,3 +154,36 @@ export const updateExerciseStatus = async (data: {
 
   return response.json();
 };
+
+//TODO: get typing right.
+export const createWorkout = async (workoutData: WorkoutDraft): Promise<WorkoutDraft> => {
+  const response = await fetch("/api/workouts/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(workoutData),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Unable to create exercise.");
+  }
+
+  return response.json();
+};
+
+
+// //TODO: get typing right.
+// export const updateWorkout = async (workoutData: T): Promise<T> => {
+//   const response = await fetch("/api/workouts/create", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify(workoutData),
+//   });
+
+//   if (!response.ok) {
+//     const error = await response.json();
+//     throw new Error(error.message || "Unable to create exercise.");
+//   }
+
+//   return response.json();
+// };

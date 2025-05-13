@@ -30,3 +30,41 @@ const FormSchema = z.object({
 export const UpdateExerciseSchema = FormSchema.omit({slug: true});
 
 export const CreateExerciseSchema = FormSchema.omit({id: true, slug: true});
+
+export const WorkoutFormSchema = z.object({
+  name: z.string().min(1, "Workout name is required").trim(),
+  slug: z.string().min(1).trim(), // optional: regenerate server-side
+  description: z.string().optional().nullable(),
+  authorId: z.number().int().positive(),
+
+  exercises: z.array(
+    z.object({
+      name: z.string().min(1),
+      exerciseId: z.number().int().positive(),
+      order: z.number().int().nonnegative().optional().nullable(),
+      intensity: z.number().int().optional().nullable(),
+      note: z.string().optional().nullable(),
+      duration: z.number().int().optional().nullable(),
+
+      intendedSets: z
+        .array(
+          z.object({
+            setNumber: z.number().int().nonnegative(),
+            reps: z.union([
+              z.number().int().nonnegative(),
+              z.string().regex(/^\d+$/, "Reps must be a number").transform(Number),
+              z.null()
+            ]),
+            weight: z
+              .union([
+                z.number().nonnegative(),
+                z.string().regex(/^\d+(\.\d+)?$/, "Weight must be a number").transform(Number),
+                z.null()
+              ])
+              .optional(),
+          })
+        )
+        .min(1, "Each exercise must include at least one set"),
+    })
+  ).min(1, "Workout must include at least one exercise"),
+});

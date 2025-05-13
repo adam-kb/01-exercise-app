@@ -55,6 +55,27 @@ export type Workout = Prisma.WorkoutGetPayload<{
   include: typeof WorkoutSelect
 }>;
 
+export type WorkoutDraft = {
+  name: string;
+  slug: string;
+  description?: string;
+  authorId: number;
+  authorUserName: string;
+  exercises: {
+    name: string;
+    exerciseId: number;
+    order?: number | null;
+    intensity?: number | null;
+    note?: string;
+    duration: number | null;
+    intendedSets: {
+      setNumber: number;
+      reps: number | string | null;
+      weight?: number | string | null;
+    }[]
+  }[]
+}
+
 export type WorkoutsResponse = {
   workouts: Workout[]
 }
