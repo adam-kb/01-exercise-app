@@ -157,7 +157,9 @@ export const updateExerciseStatus = async (data: {
 
 //TODO: get typing right.
 export const createWorkout = async (workoutData: WorkoutDraft): Promise<WorkoutDraft> => {
-  const response = await fetch("/api/workouts/create", {
+  const baseUrl =
+    typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+  const response = await fetch(`${baseUrl}/api/workouts/create`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(workoutData),

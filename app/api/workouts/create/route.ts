@@ -3,12 +3,24 @@ import { Prisma } from "@prisma/client";
 import { WorkoutDraft } from "@/app/lib/definitions";
 import { WorkoutFormSchema } from "@/app/lib/actions";
 import prisma from "@/app/lib/prisma";
-import { slugify } from "@/app/lib/utils";
+import { slugify, toOptionalFloat, toOptionalInt } from "@/app/lib/utils";
 
 export const POST = async (request: Request) => {
   try {
     const workoutPayload = (await request.json()) as WorkoutDraft
 
+    try {
+      const data = WorkoutFormSchema.parse(workoutPayload);
+      console.log("Zod validation passed:", data);
+    } catch (err: any) {
+      console.error("Zod validation failed:", JSON.stringify(err, null, 2));
+    
+      // Optional: return error details to client
+      return new Response(
+        JSON.stringify({ error: "Validation failed", issues: err.errors }),
+        { status: 400 }
+      );
+    }
     const data = WorkoutFormSchema.parse(workoutPayload);
 
     const createdWorkout = await prisma.workout.create({
@@ -31,14 +43,8 @@ export const POST = async (request: Request) => {
             intendedSets: {
               create: ex.intendedSets.map((set) => ({
                 setNumber: set.setNumber,
-                reps:
-                  typeof set.reps === "string"
-                    ? parseInt(set.reps)
-                    : set.reps ?? null,
-                weight:
-                  typeof set.weight === "string"
-                    ? parseFloat(set.weight)
-                    : set.weight ?? null,
+                reps: toOptionalInt(set.reps),
+                weight: toOptionalFloat(set.weight)
               })),
             },
           })),
@@ -53,9 +59,11 @@ export const POST = async (request: Request) => {
         },
       },
     });
-
+    
+    // console.log("Workout Payload:", JSON.stringify(createdWorkout, null, 2));
     return NextResponse.json(createdWorkout);
   } catch (error) {
+    
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle specific Prisma errors
       return NextResponse.json(

@@ -107,3 +107,15 @@ export function debounce<T extends (...args: string[]) => void>(
 
   return { callback, cancel };
 }
+
+export const toOptionalFloat = (val: string | number | null | undefined): number | null => {
+  if (typeof val === "number") return val;
+  const parsed = parseFloat(val ?? "");
+  return isNaN(parsed) ? null : parsed;
+};
+
+export const toOptionalInt = (val: string | number | null | undefined): number | null => {
+  if (typeof val === "number") return val;
+  const parsed = parseInt(val ?? "", 10);
+  return isNaN(parsed) ? null : parsed;
+};

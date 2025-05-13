@@ -33,7 +33,7 @@ export const CreateExerciseSchema = FormSchema.omit({id: true, slug: true});
 
 export const WorkoutFormSchema = z.object({
   name: z.string().min(1, "Workout name is required").trim(),
-  slug: z.string().min(1).trim(), // optional: regenerate server-side
+  slug: z.string().trim().optional(), // optional: regenerate server-side
   description: z.string().optional().nullable(),
   authorId: z.number().int().positive(),
 
@@ -46,25 +46,27 @@ export const WorkoutFormSchema = z.object({
       note: z.string().optional().nullable(),
       duration: z.number().int().optional().nullable(),
 
-      intendedSets: z
-        .array(
-          z.object({
-            setNumber: z.number().int().nonnegative(),
-            reps: z.union([
-              z.number().int().nonnegative(),
-              z.string().regex(/^\d+$/, "Reps must be a number").transform(Number),
-              z.null()
-            ]),
-            weight: z
-              .union([
-                z.number().nonnegative(),
-                z.string().regex(/^\d+(\.\d+)?$/, "Weight must be a number").transform(Number),
-                z.null()
-              ])
-              .optional(),
-          })
-        )
-        .min(1, "Each exercise must include at least one set"),
+      intendedSets: z.array(
+        z.object({
+          setNumber: z.number().int().nonnegative(),
+          reps: z.preprocess(
+            (val) => {
+              if (val === "" || val === null || val === undefined) return null;
+              if (typeof val === "string") return parseInt(val, 10);
+              return val;
+            },
+            z.union([z.number().int().nonnegative(), z.null()])
+          ),
+          weight: z.preprocess(
+            (val) => {
+              if (val === "" || val === null || val === undefined) return null;
+              if (typeof val === "string") return parseFloat(val);
+              return val;
+            },
+            z.union([z.number().nonnegative(), z.null()])
+          ).optional(),
+        })
+      ).min(1, "Each exercise must include at least one set"),
     })
   ).min(1, "Workout must include at least one exercise"),
 });

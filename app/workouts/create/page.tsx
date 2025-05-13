@@ -16,6 +16,7 @@ const CreateWorkoutPage = () => {
     setError(error);
   }
   const workout = useWorkoutFormStore((state) => state.workout)
+  const mutation = useWorkoutMutation({ mode: "create", workout: workout, onError: handleError });
   const { setName, setDescription, addExercise, removeExercise, addSet, removeSet, updateSet } = workoutStore();
 
   const [inputValue, setInputValue] = useState('');
@@ -29,7 +30,6 @@ const CreateWorkoutPage = () => {
   const { callback: debouncedSearch, cancel } = useMemo(() => debounce(handleSearch, 300), []);
 
   const handleSubmit = () => {
-    const mutation = useWorkoutMutation({ mode: "create", workout: workout, onError: handleError });
     mutation.mutate(workout)
   }
   useEffect(() => {
@@ -97,6 +97,7 @@ const CreateWorkoutPage = () => {
           </li>
         ))}
       </ul>
+      <button onClick={handleSubmit}>Submit Workout</button>
     </div>
   </>
   )
