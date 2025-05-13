@@ -15,14 +15,13 @@ const Navigation = () => {
 
   const TopNav = ({ mode }: { mode?: "desktop" | "mobile" }) => {
     return (
-      (
-        <>
-          <NavLink href="/exercises" mode={mode}>Exercises</NavLink>
-          <NavLink href="/exercises/featured" mode={mode}>Featured Exercises</NavLink>
-          <NavLink href="/exercises/create" mode={mode}>Create Exercise</NavLink>
-          <NavLink href="/workouts" mode={mode}>Workouts</NavLink>
-        </>
-      )
+      <>
+        <NavLink href="/exercises" mode={mode}>Exercises</NavLink>
+        <NavLink href="/exercises/featured" mode={mode}>Featured Exercises</NavLink>
+        <NavLink href="/exercises/create" mode={mode}>Create Exercise</NavLink>
+        <NavLink href="/workouts" mode={mode}>Workouts</NavLink>
+        <NavLink href="/workouts/create" mode={mode}>Create Workout</NavLink>
+      </>
     )
   }
 
