@@ -16,7 +16,7 @@ const WorkoutBuilder = () => {
             <ul>
               {exercise.intendedSets && exercise.intendedSets.map(set => (
                 <li key={set.setNumber} className="mt-4">
-                  Set: {set.setNumber} - <input type="text" value={set.reps?.toString()} className="w-12 border" onChange={(e) => {
+                  Set: {set.setNumber} - <input type="text" defaultValue={set.reps?.toString()} className="w-12 border" onChange={(e) => {
                     const val = parseInt(e.target.value);
                     updateSet(exercise.exerciseId, set.setNumber.toString(), { reps: isNaN(val) ? null : val });
                   }} />

@@ -18,8 +18,8 @@ const Workout = ({ workout }: { workout: WorkoutData }) => {
                   {assignedExercise.intendedSets.map(set => (
                     <li className="gap-2 flex" key={set.id}>
                       <span>{set.setNumber} {set.reps} &times; {set.weight}</span>
-                      <input type="number" className="border" id={`user-set-${set.id}`} placeholder={set.reps?.toString()}></input>
-                      <input type="number" className="border" id={`user-weight-${set.id}`} placeholder={set.weight?.toString()}></input>
+                      {/* <input type="number" className="border" id={`user-set-${set.id}`} placeholder={set.reps?.toString()}></input> */}
+                      {/* <input type="number" className="border" id={`user-weight-${set.id}`} placeholder={set.weight?.toString()}></input> */}
                     </li>
                   ))}
                 </ul>
