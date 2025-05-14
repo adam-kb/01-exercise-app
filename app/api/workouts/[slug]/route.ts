@@ -22,8 +22,6 @@ export const GET = async (
       include: WorkoutSelect
     })
 
-    console.log(workout)
-
     if (!workout) {
       throw new Error("Workout not found");
     }
