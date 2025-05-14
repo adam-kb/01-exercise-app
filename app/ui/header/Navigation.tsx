@@ -53,7 +53,6 @@ const Navigation = () => {
                   alt="Logo"
                   width={32}
                   height={32}
-                  priority={true}
                   className="w-10 h-10"
                 />
               </Link>
