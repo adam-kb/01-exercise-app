@@ -62,7 +62,6 @@ model ExerciseWorkout {
   exerciseId          Int
   order               Int?
   note                String?
-  intensity           Int?
   intendedSets        IntendedSets[]
   duration            Int?
   createdAt           DateTime  @default(now())
@@ -92,6 +91,7 @@ model WorkoutHistory {
   workoutId   Int
   exerciseHistory ExerciseHistory[]
   note        String?
+  intensity   Int?
 
   startTime   DateTime
   endTime     DateTime
