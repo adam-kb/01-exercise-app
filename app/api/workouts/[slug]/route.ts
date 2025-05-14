@@ -1,5 +1,6 @@
 import { Workout, WorkoutSelect } from "@/app/lib/definitions";
 import prisma from "@/app/lib/prisma";
+import { workoutToDraft } from "@/app/lib/utils";
 import { NextResponse } from "next/server";
 
 export const GET = async (
@@ -21,7 +22,15 @@ export const GET = async (
       include: WorkoutSelect
     })
 
-    return NextResponse.json(workout, {status: 200});
+    console.log(workout)
+
+    if (!workout) {
+      throw new Error("Workout not found");
+    }
+
+    const draft = workoutToDraft(workout);
+
+    return NextResponse.json(draft, {status: 200});
 
   } catch (error) {
     console.error("Error Fetching Workout", error);

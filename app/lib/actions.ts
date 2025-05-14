@@ -36,7 +36,7 @@ export const WorkoutFormSchema = z.object({
   slug: z.string().trim().optional(), // optional: regenerate server-side
   description: z.string().optional().nullable(),
   authorId: z.number().int().positive(),
-
+  authorUserName: z.string(),
   exercises: z.array(
     z.object({
       name: z.string().min(1),

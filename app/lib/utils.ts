@@ -1,6 +1,6 @@
 import prisma from "@/app/lib/prisma";
 import { Status as ExerciseStatus } from "@prisma/client";
-import { ExerciseFormInputs, ValidateExerciseOptions } from "./definitions";
+import { ExerciseFormInputs, ValidateExerciseOptions, Workout, WorkoutDraft } from "./definitions";
 
 // TODO: Does this belong here? If not, where? Is this a util?
 export const isValidExercise = async ({
@@ -119,3 +119,23 @@ export const toOptionalInt = (val: string | number | null | undefined): number |
   const parsed = parseInt(val ?? "", 10);
   return isNaN(parsed) ? null : parsed;
 };
+
+export const workoutToDraft = (workout: Workout): WorkoutDraft => ({
+  name: workout.name,
+  slug: workout.slug,
+  description: workout.description ?? "",
+  authorId: workout.authorId,
+  authorUserName: workout.author?.userName ?? "",
+  exercises: workout.exercises.map((ex) => ({
+    name: ex.exercise.name,
+    exerciseId: ex.exerciseId,
+    order: ex.order ?? null,
+    note: ex.note ?? "",
+    duration: ex.duration ?? 0,
+    intendedSets: ex.intendedSets.map((set) => ({
+      setNumber: set.setNumber,
+      reps: set.reps ?? "",
+      weight: set.weight ?? "",
+    })),
+  })),
+});

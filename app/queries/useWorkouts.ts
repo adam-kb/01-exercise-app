@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { Workout } from "../lib/definitions";
+import { Workout, WorkoutDraft } from "../lib/definitions";
 
 export const fetchWorkouts = async (): Promise<Workout[]> => {
   const baseUrl =
@@ -8,14 +8,13 @@ export const fetchWorkouts = async (): Promise<Workout[]> => {
   const response = await fetch(`${baseUrl}/api/workouts`);
 
   if(!response.ok) {
-    console.log(response);
     throw new Error("Error fetching workouts")
   }
 
   return response.json();
 }
 
-export const getWorkoutData = async (slug: string): Promise<Workout> => {
+export const getWorkoutData = async (slug: string): Promise<WorkoutDraft> => {
   const baseUrl =
     typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
