@@ -12,6 +12,7 @@ type WorkoutFormStore = {
   // setAuthor: (author: string) => void; // should be scraped from the user etc etc. getting to it
   addExercise: (exerciseName: string, exerciseId: number) => void;
   removeExercise: (exerciseId: number) => void;
+  addExerciseNote: (exerciseNote: string, exerciseId: number) => void;
   addSet: (exerciseId: number) => void;
   removeSet: (exerciseIndex: number, setIndex: number) => void;
   updateSet: (
@@ -55,7 +56,6 @@ export const useWorkoutFormStore = create<WorkoutFormStore>()(
             name: exerciseName,
             exerciseId,
             order: null,
-            intensity: null,
             note: "",
             duration: 0,
             intendedSets: [createSet(0), createSet(1), createSet(2)],
@@ -67,6 +67,12 @@ export const useWorkoutFormStore = create<WorkoutFormStore>()(
             (e) => e.exerciseId !== exerciseId
           );
         }),
+      addExerciseNote: (exerciseNote, exerciseId) =>
+          set((state) => {
+            const exercise = state.workout.exercises.find(e => e.exerciseId === exerciseId)
+            if (!exercise) return;
+            exercise.note = exerciseNote;
+          }),
       addSet: (exerciseId) =>
         set((state) => {
           const exercise = state.workout.exercises.find(e => e.exerciseId === exerciseId);

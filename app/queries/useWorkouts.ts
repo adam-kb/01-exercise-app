@@ -7,7 +7,6 @@ export const fetchWorkouts = async (): Promise<Workout[]> => {
 
   const response = await fetch(`${baseUrl}/api/workouts`);
 
-  console.log(response);
   if(!response.ok) {
     console.log(response);
     throw new Error("Error fetching workouts")

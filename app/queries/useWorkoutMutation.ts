@@ -12,7 +12,7 @@ type WorkoutMutationProps = {
 };
 
 export const useWorkoutMutation = ({
-  mode,
+  // mode,
   workout,
   onError,
 }: WorkoutMutationProps) => {

@@ -53,6 +53,7 @@ const WorkoutForm = () => {
       <h2>Exercises</h2>
       <ExerciseSearch onSelect={({ name, id }) => addExercise(name, id)} />
       <WorkoutBuilder />
+      {error && error}
       <Button className="button-primary" disabled={mutation.isPending} onClick={handleSubmit}>{buttonText}</Button>
     </>
   )

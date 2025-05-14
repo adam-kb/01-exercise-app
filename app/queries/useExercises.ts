@@ -4,7 +4,6 @@ import {
   CreateExercise,
   FeatureExerciseOutputData,
   ApiError,
-  Workout,
   WorkoutDraft,
 } from "@/app/lib/definitions";
 import { Status } from "@prisma/client";

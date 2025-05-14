@@ -65,7 +65,6 @@ export type WorkoutDraft = {
     name: string;
     exerciseId: number;
     order?: number | null;
-    intensity?: number | null;
     note?: string;
     duration: number | null;
     intendedSets: {

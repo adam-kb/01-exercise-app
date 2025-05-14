@@ -1,9 +1,10 @@
 import { useWorkoutActions as workoutStore } from "@/app/lib/store/hooks/useWorkoutAction";
 import { useWorkoutFormStore } from "@/app/lib/store/workoutFormStore";
+import { EditInput } from "../FormInputs";
 
 const WorkoutBuilder = () => {
   const workout = useWorkoutFormStore((state) => state.workout);
-  const { removeExercise, addSet, removeSet, updateSet } = workoutStore();
+  const { removeExercise, addExerciseNote, addSet, removeSet, updateSet } = workoutStore();
 
   return (
     <div>
@@ -13,6 +14,13 @@ const WorkoutBuilder = () => {
           <li key={exercise.exerciseId}>
             <button onClick={() => removeExercise(exercise.exerciseId)}>Remove Exercise</button>
             <h4 className="text-xl font-bold">{exercise.name}</h4>
+            <EditInput
+              label="Exercise Note"
+              name="exercisenote"
+              placeholder="Note for execution or tips for exercise"
+              defaultValue=""
+              onChange={(e) => addExerciseNote(e.target.value, exercise.exerciseId)}
+            />
             <ul>
               {exercise.intendedSets && exercise.intendedSets.map(set => (
                 <li key={set.setNumber} className="mt-4">

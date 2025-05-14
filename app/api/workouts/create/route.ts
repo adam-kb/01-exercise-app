@@ -4,22 +4,24 @@ import { WorkoutDraft } from "@/app/lib/definitions";
 import { WorkoutFormSchema } from "@/app/lib/actions";
 import prisma from "@/app/lib/prisma";
 import { slugify, toOptionalFloat, toOptionalInt } from "@/app/lib/utils";
+import { z } from "zod";
 
 export const POST = async (request: Request) => {
   try {
-    const workoutPayload = (await request.json()) as WorkoutDraft
+    const workoutPayload = (await request.json()) as WorkoutDraft;
 
     try {
       const data = WorkoutFormSchema.parse(workoutPayload);
       console.log("Zod validation passed:", data);
-    } catch (err: any) {
+    } catch (err) {
       console.error("Zod validation failed:", JSON.stringify(err, null, 2));
-    
-      // Optional: return error details to client
-      return new Response(
-        JSON.stringify({ error: "Validation failed", issues: err.errors }),
-        { status: 400 }
-      );
+
+      if (err instanceof z.ZodError) {
+        return new Response(
+          JSON.stringify({ error: "Validation failed", issues: err.errors }),
+          { status: 400 }
+        );
+      }
     }
     const data = WorkoutFormSchema.parse(workoutPayload);
 
@@ -35,7 +37,6 @@ export const POST = async (request: Request) => {
           create: data.exercises.map((ex) => ({
             note: ex.note?.trim() ?? null,
             order: ex.order ?? null,
-            intensity: ex.intensity ?? null,
             duration: ex.duration ?? null,
             exercise: {
               connect: { id: ex.exerciseId },
@@ -44,7 +45,7 @@ export const POST = async (request: Request) => {
               create: ex.intendedSets.map((set) => ({
                 setNumber: set.setNumber,
                 reps: toOptionalInt(set.reps),
-                weight: toOptionalFloat(set.weight)
+                weight: toOptionalFloat(set.weight),
               })),
             },
           })),
@@ -59,11 +60,9 @@ export const POST = async (request: Request) => {
         },
       },
     });
-    
-    // console.log("Workout Payload:", JSON.stringify(createdWorkout, null, 2));
+
     return NextResponse.json(createdWorkout);
   } catch (error) {
-    
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle specific Prisma errors
       return NextResponse.json(

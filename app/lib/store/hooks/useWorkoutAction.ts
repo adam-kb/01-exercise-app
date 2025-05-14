@@ -8,6 +8,7 @@ export const useWorkoutActions = () =>
       setDescription: state.setDescription,
       addExercise: state.addExercise,
       removeExercise: state.removeExercise,
+      addExerciseNote: state.addExerciseNote,
       addSet: state.addSet,
       removeSet: state.removeSet,
       updateSet: state.updateSet,
