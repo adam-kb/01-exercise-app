@@ -25,6 +25,9 @@ input, textarea, select {
 }
 a[target="_blank"]::after { content: ' ⧉'; }
 
+button.button-primary {
+  @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 text-sm px-2 rounded disabled:opacity-75 disabled:hover:opacity-75 disabled:cursor-not-allowed;
+}
 .shimmer {
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
   background-size: 400% 400%;

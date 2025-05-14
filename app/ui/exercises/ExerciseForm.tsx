@@ -136,7 +136,7 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
         <Button
           type="submit"
           disabled={mutation.isPending}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 text-sm px-2 rounded disabled:opacity-75 disabled:hover:opacity-75 disabled:cursor-not-allowed"
+          className="button-primary"
         >
           {buttonText}
         </Button>
