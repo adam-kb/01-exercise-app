@@ -1,7 +1,24 @@
+import { Metadata } from "next";
 import { getQueryClient } from "@/app/getQueryClient";
 import { getWorkoutData } from "@/app/queries/useWorkouts";
 import Workout from "@/app/ui/workouts/Workout";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+
+export const generateMetadata = async ({
+  params
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> => {
+
+  const workoutSlug = (await params).slug
+
+  const workout = await getWorkoutData(workoutSlug);
+
+  return {
+    title: workout.name,
+    description: workout.description
+  }
+}
 
 const WorkoutPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
@@ -15,7 +32,6 @@ const WorkoutPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
   return (
     <main>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <h1>Workout Page</h1>
         <Workout workout={workoutData} />
       </HydrationBoundary>
     </main>
