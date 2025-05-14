@@ -155,7 +155,6 @@ export const updateExerciseStatus = async (data: {
   return response.json();
 };
 
-//TODO: get typing right.
 export const createWorkout = async (workoutData: WorkoutDraft): Promise<WorkoutDraft> => {
   const baseUrl =
     typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
