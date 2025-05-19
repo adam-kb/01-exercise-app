@@ -1,8 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { getQueryClient } from "@/app/getQueryClient";
-import { createWorkout } from "@/app/queries/useExercises";
-// import { createWorkout, updateWorkout } from "@/app/queries/useExercises";
+import { createWorkout, updateWorkout } from "@/app/queries/useExercises";
 import { ApiErrorProps } from "../lib/definitions";
 
 type WorkoutMutationProps = {
@@ -12,15 +11,14 @@ type WorkoutMutationProps = {
 };
 
 export const useWorkoutMutation = ({
-  // mode,
+  mode,
   workout,
   onError,
 }: WorkoutMutationProps) => {
   const queryClient = getQueryClient();
   const router = useRouter();
 
-  // const mutationFn = mode === "update" ? updateWorkout : createWorkout;
-  const mutationFn = createWorkout;
+  const mutationFn = mode === "update" ? updateWorkout : createWorkout;
   
   const mutation = useMutation({
     mutationFn,

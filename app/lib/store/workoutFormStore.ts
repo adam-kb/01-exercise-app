@@ -8,6 +8,7 @@ type WorkoutFormStore = {
   workout: WorkoutDraft;
   setName: (name: string) => void;
   setDescription: (description: string) => void;
+  hydrate: (draft: WorkoutDraft) => void;
   // setAuthorId: (authorId: number) => void;
   // setAuthor: (author: string) => void; // should be scraped from the user etc etc. getting to it
   addExercise: (exerciseName: string, exerciseId: number) => void;
@@ -33,9 +34,10 @@ export const useWorkoutFormStore = create<WorkoutFormStore>()(
     immer<WorkoutFormStore>((set) => ({
       workout: {
         name: "",
+        id: undefined,
         slug: "",
         description: "",
-        authorUserName: "testuser", // Mimic the only user we have username and id 
+        authorUserName: "testuser", // Mimic the only user we have username and id
         authorId: 1,
         exercises: [],
       },
@@ -47,11 +49,17 @@ export const useWorkoutFormStore = create<WorkoutFormStore>()(
         set((state) => {
           state.workout.description = description;
         }),
+      hydrate: (draft) =>
+        set((state) => {
+          state.workout = draft;
+        }),
       addExercise: (exerciseName, exerciseId) =>
         set((state) => {
-          const exercise = state.workout.exercises.find(e => e.exerciseId === exerciseId);
+          const exercise = state.workout.exercises.find(
+            (e) => e.exerciseId === exerciseId
+          );
           if (exercise) return;
-          
+
           state.workout.exercises.push({
             name: exerciseName,
             exerciseId,
@@ -68,38 +76,48 @@ export const useWorkoutFormStore = create<WorkoutFormStore>()(
           );
         }),
       addExerciseNote: (exerciseNote, exerciseId) =>
-          set((state) => {
-            const exercise = state.workout.exercises.find(e => e.exerciseId === exerciseId)
-            if (!exercise) return;
-            exercise.note = exerciseNote;
-          }),
+        set((state) => {
+          const exercise = state.workout.exercises.find(
+            (e) => e.exerciseId === exerciseId
+          );
+          if (!exercise) return;
+          exercise.note = exerciseNote;
+        }),
       addSet: (exerciseId) =>
         set((state) => {
-          const exercise = state.workout.exercises.find(e => e.exerciseId === exerciseId);
+          const exercise = state.workout.exercises.find(
+            (e) => e.exerciseId === exerciseId
+          );
           if (!exercise) return;
 
-          const newSet = createSet(exercise.intendedSets.length)
+          const newSet = createSet(exercise.intendedSets.length);
           exercise.intendedSets.push(newSet);
         }),
       removeSet: (exerciseId, setNumber) =>
         set((state) => {
-          const exercise = state.workout.exercises.find(e => e.exerciseId === exerciseId);
+          const exercise = state.workout.exercises.find(
+            (e) => e.exerciseId === exerciseId
+          );
           if (!exercise) return;
 
           exercise.intendedSets = exercise.intendedSets
             .filter((set) => set.setNumber !== setNumber)
             .map((set, i: number) => ({
               ...set,
-              setNumber: i + 1
-            }))
+              setNumber: i + 1,
+            }));
         }),
-      updateSet: (exerciseId, setNumber, updates) => 
+      updateSet: (exerciseId, setNumber, updates) =>
         set((state) => {
-          const exercise = state.workout.exercises.find(e => e.exerciseId === exerciseId);
-          const setToUpdate = exercise?.intendedSets.find(set => set.setNumber === parseInt(setNumber))
-          if(!setToUpdate) return
+          const exercise = state.workout.exercises.find(
+            (e) => e.exerciseId === exerciseId
+          );
+          const setToUpdate = exercise?.intendedSets.find(
+            (set) => set.setNumber === parseInt(setNumber)
+          );
+          if (!setToUpdate) return;
 
-          Object.assign(setToUpdate, updates)
+          Object.assign(setToUpdate, updates);
         }),
     }))
   )

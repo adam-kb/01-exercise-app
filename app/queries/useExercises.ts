@@ -154,7 +154,9 @@ export const updateExerciseStatus = async (data: {
   return response.json();
 };
 
-export const createWorkout = async (workoutData: WorkoutDraft): Promise<WorkoutDraft> => {
+export const createWorkout = async (
+  workoutData: WorkoutDraft
+): Promise<WorkoutDraft> => {
   const baseUrl =
     typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
   const response = await fetch(`${baseUrl}/api/workouts/create`, {
@@ -171,19 +173,22 @@ export const createWorkout = async (workoutData: WorkoutDraft): Promise<WorkoutD
   return response.json();
 };
 
+// TODO: Update this for DRY etc
+export const updateWorkout = async (
+  workoutData: WorkoutDraft
+): Promise<WorkoutDraft> => {
+  const baseUrl =
+    typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+  const response = await fetch(`${baseUrl}/api/workouts/update`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(workoutData),
+  });
 
-// //TODO: get typing right.
-// export const updateWorkout = async (workoutData: T): Promise<T> => {
-//   const response = await fetch("/api/workouts/create", {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify(workoutData),
-//   });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Unable to create exercise.");
+  }
 
-//   if (!response.ok) {
-//     const error = await response.json();
-//     throw new Error(error.message || "Unable to create exercise.");
-//   }
-
-//   return response.json();
-// };
+  return response.json();
+};

@@ -8,6 +8,7 @@ const Workout = ({ workout }: { workout: WorkoutDraft }) => {
       <div>
         <h1 className="text-3xl font-bold inline-block">{workout.name}</h1> <span className="text-md text-gray-500 italic">by {workout.authorUserName}</span>
         {workout.description && <p>{workout.description}</p>}
+        <p>ID: {workout.id}</p>
       </div>
       <div>
         <h2 className="text-2xl">Exercises</h2>

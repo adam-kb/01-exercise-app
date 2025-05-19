@@ -56,6 +56,7 @@ export type Workout = Prisma.WorkoutGetPayload<{
 }>;
 
 export type WorkoutDraft = {
+  id?: number;
   name: string;
   slug: string;
   description?: string;

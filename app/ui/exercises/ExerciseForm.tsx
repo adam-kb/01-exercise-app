@@ -17,12 +17,12 @@ import FeedbackMessage from "../FeedbackMessage";
 
 const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
   const [error, setError] = useState<ApiErrorProps | null>(null);
-  
+
   const handleError = (error: ApiErrorProps) => {
     setError(error);
   }
-  
-  const mutation = useExerciseMutation({mode, exercise, onError: handleError});
+
+  const mutation = useExerciseMutation({ mode, exercise, onError: handleError });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -128,11 +128,11 @@ const ExerciseForm = ({ mode, exercise }: ExerciseFormProps) => {
             <ToggleStatus id={exercise.id} currentStatus={exercise.status} />
           )}
         </div>
-          {error &&
+        {error &&
           error.details.map(detail => (
             <FeedbackMessage key={detail.path[0]} type="error" title={error.message} message={detail.message} />
           ))
-          }
+        }
         <Button
           type="submit"
           disabled={mutation.isPending}

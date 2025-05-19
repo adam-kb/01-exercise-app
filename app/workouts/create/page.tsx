@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 const CreateWorkoutPage = () => {
-  return <WorkoutForm />
+  return <WorkoutForm mode="create" />
 }
 
 export default CreateWorkoutPage;

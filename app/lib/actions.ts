@@ -13,7 +13,7 @@ const MediaSchema = z.object({
   type: z.nativeEnum(MediaType),
 });
 
-const FormSchema = z.object({
+const ExerciseSchema = z.object({
   id: z.coerce.number(),
   name: z.string().max(40, {message: "Please keep the name under 40 characters."}),
   slug: z.string(),
@@ -27,11 +27,12 @@ const FormSchema = z.object({
   equipment: z.array(z.object({id: z.coerce.number()})).optional(),
 });
 
-export const UpdateExerciseSchema = FormSchema.omit({slug: true});
+export const UpdateExerciseSchema = ExerciseSchema.omit({slug: true});
 
-export const CreateExerciseSchema = FormSchema.omit({id: true, slug: true});
+export const CreateExerciseSchema = ExerciseSchema.omit({id: true, slug: true});
 
-export const WorkoutFormSchema = z.object({
+const WorkoutSchema = z.object({
+  id: z.coerce.number(),
   name: z.string().min(1, "Workout name is required").trim(),
   slug: z.string().trim().optional(), // optional: regenerate server-side
   description: z.string().optional().nullable(),
@@ -70,3 +71,7 @@ export const WorkoutFormSchema = z.object({
     })
   ).min(1, "Workout must include at least one exercise"),
 });
+
+export const UpdateWorkoutSchema = WorkoutSchema.omit({slug: true});
+
+export const CreateWorkoutSchema = WorkoutSchema.omit({id: true, slug: true});

@@ -121,6 +121,7 @@ export const toOptionalInt = (val: string | number | null | undefined): number |
 };
 
 export const workoutToDraft = (workout: Workout): WorkoutDraft => ({
+  id: workout.id,
   name: workout.name,
   slug: workout.slug,
   description: workout.description ?? "",

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { WorkoutDraft } from "@/app/lib/definitions";
-import { WorkoutFormSchema } from "@/app/lib/actions";
+import { CreateWorkoutSchema } from "@/app/lib/actions";
 import prisma from "@/app/lib/prisma";
 import { slugify, toOptionalFloat, toOptionalInt } from "@/app/lib/utils";
 import { z } from "zod";
@@ -11,7 +11,7 @@ export const POST = async (request: Request) => {
     const workoutPayload = (await request.json()) as WorkoutDraft;
 
     try {
-      const data = WorkoutFormSchema.parse(workoutPayload);
+      const data = CreateWorkoutSchema.parse(workoutPayload);
       console.log("Zod validation passed:", data);
     } catch (err) {
       console.error("Zod validation failed:", JSON.stringify(err, null, 2));
@@ -23,7 +23,7 @@ export const POST = async (request: Request) => {
         );
       }
     }
-    const data = WorkoutFormSchema.parse(workoutPayload);
+    const data = CreateWorkoutSchema.parse(workoutPayload);
 
     const createdWorkout = await prisma.workout.create({
       data: {
