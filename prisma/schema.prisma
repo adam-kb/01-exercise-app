@@ -80,7 +80,7 @@ model IntendedSets {
   weight      Float?
   workoutId   Int
   exerciseId  Int
-  exerciseWorkout     ExerciseWorkout   @relation(fields: [workoutId, exerciseId], references: [workoutId, exerciseId])
+  exerciseWorkout     ExerciseWorkout   @relation(fields: [workoutId, exerciseId], references: [workoutId, exerciseId], onDelete: Cascade)
   
   @@index([workoutId, exerciseId])
 }
